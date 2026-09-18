@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyUniGuideSA · Contact</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+      (function () {
+        const t = localStorage.getItem('uniPath_theme') || 'dark';
+        if (t === 'light') document.documentElement.classList.add('light');
+      })();
+    </script>
+    <style>
+      body { padding-left: 0.75rem; padding-right: 0.75rem; }
+      .app-container { max-width: 520px; }
+      .top-bar { margin-left: 2.8rem; margin-bottom: 0.5rem; }
+      .contact-card { padding: 1.35rem 1.15rem 1.5rem; }
+      .contact-hero {
+        text-align: center; margin-bottom: 1.35rem; padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .contact-hero h2 { justify-content: center; margin-bottom: 0.45rem; font-size: 1.35rem; }
+      .contact-intro {
+        margin: 0 auto; max-width: 26rem; text-align: center;
+        color: var(--text-muted); font-size: 0.92rem; line-height: 1.5;
+      }
+      .contact-list { display: flex; flex-direction: column; gap: 0.7rem; }
+      .contact-item {
+        display: flex; flex-direction: column; gap: 0.75rem;
+        padding: 1rem; border-radius: 16px;
+        border: 1px solid var(--border); background: var(--surface);
+      }
+      .contact-item-top {
+        display: flex; flex-direction: row; align-items: center;
+        gap: 0.85rem; text-align: left;
+      }
+      .contact-icon {
+        width: 42px; height: 42px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; font-size: 1.15rem; font-weight: 700;
+        background: var(--surface2); border: 1px solid var(--border);
+      }
+      .contact-item.whatsapp .contact-icon {
+        background: rgba(34,197,94,0.18); border-color: rgba(34,197,94,0.4); color: #22c55e;
+      }
+      .contact-item.email .contact-icon {
+        background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.35); color: #60a5fa;
+      }
+      .contact-item.facebook .contact-icon {
+        background: rgba(96,165,250,0.12); border-color: rgba(96,165,250,0.35); color: #93c5fd;
+      }
+      .contact-item-text { min-width: 0; text-align: left; }
+      .contact-item-text strong {
+        display: block; color: var(--heading); font-size: 0.98rem;
+        margin-bottom: 0.12rem; text-align: left;
+      }
+      .contact-item-text span {
+        display: block; color: var(--text-muted); font-size: 0.88rem;
+        word-break: break-all; text-align: left;
+      }
+      .contact-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+      .contact-action {
+        border: 1px solid var(--border); background: var(--surface3); color: var(--text);
+        border-radius: 999px; padding: 0.48rem 0.95rem; font-size: 0.8rem;
+        font-weight: 600; cursor: pointer; font-family: inherit; text-decoration: none;
+      }
+      .contact-action.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .contact-note {
+        margin-top: 1.2rem; padding: 0.9rem 1rem; border-radius: 14px;
+        background: var(--surface2); border: 1px solid var(--border);
+        color: var(--text-muted); font-size: 0.84rem; line-height: 1.5; text-align: center;
+      }
+      .copy-toast {
+        position: fixed; left: 50%; bottom: 1.4rem;
+        transform: translateX(-50%) translateY(120%);
+        background: var(--accent); color: #fff; padding: 0.6rem 1.1rem;
+        border-radius: 40px; font-size: 0.86rem; font-weight: 600; z-index: 400;
+        opacity: 0; transition: 0.25s; pointer-events: none;
+      }
+      .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+      @media (max-width: 700px) {
+        .top-bar { margin-left: 2.6rem; }
+        .contact-action { flex: 1 1 calc(50% - 0.25rem); text-align: center; }
+      }
+    </style>
+</head>
+<body>
+    <button type="button" class="menu-btn menu-btn-fixed" id="menuBtn" aria-label="Open menu" title="Menu">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+    </button>
+
+    <div class="side-menu-backdrop" id="menuBackdrop" hidden></div>
+    <nav class="side-menu" id="sideMenu" aria-label="Main menu" hidden>
+        <div class="side-menu-header">Menu</div>
+        <a class="side-menu-item" href="index.html">Home</a>
+        <a class="side-menu-item" href="index.html">Your details</a>
+        <a class="side-menu-item active" href="contact.html">Contact</a>
+    </nav>
+
+    <div class="app-container">
+        <div class="top-bar">
+            <h1>MyUniGuideSA</h1>
+            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
+                <span class="theme-icon">☀️</span>
+                <span class="theme-label">Light mode</span>
+            </button>
+        </div>
+        <div class="subhead">Contact — questions, feedback, or help.</div>
+
+        <div class="card single-card contact-card">
+            <div class="contact-hero">
+                <h2>Get in touch</h2>
+                <p class="contact-intro">WhatsApp for a quick reply, email for a longer message, or Facebook.</p>
+            </div>
+
+            <div class="contact-list">
+                <div class="contact-item whatsapp">
+                    <div class="contact-item-top">
+                        <div class="contact-icon">W</div>
+                        <div class="contact-item-text">
+                            <strong>WhatsApp</strong>
+                            <span>071 717 4302</span>
+                        </div>
+                    </div>
+                    <div class="contact-actions">
+                        <a class="contact-action primary" href="https://wa.me/27717174302" target="_blank" rel="noopener noreferrer">Open WhatsApp</a>
+                        <button type="button" class="contact-action" data-copy="0717174302">Copy number</button>
+                    </div>
+                </div>
+
+                <div class="contact-item email">
+                    <div class="contact-item-top">
+                        <div class="contact-icon">@</div>
+                        <div class="contact-item-text">
+                            <strong>Email</strong>
+                            <span>orifhamanugu334@gmail.com</span>
+                        </div>
+                    </div>
+                    <div class="contact-actions">
+                        <a class="contact-action primary" href="mailto:orifhamanugu334@gmail.com">Send email</a>
+                        <button type="button" class="contact-action" data-copy="orifhamanugu334@gmail.com">Copy email</button>
+                    </div>
+                </div>
+
+                <div class="contact-item facebook">
+                    <div class="contact-item-top">
+                        <div class="contact-icon">f</div>
+                        <div class="contact-item-text">
+                            <strong>Facebook</strong>
+                            <span>Manugu Orifha</span>
+                        </div>
+                    </div>
+                    <div class="contact-actions">
+                        <a class="contact-action primary" href="https://www.facebook.com/search/top?q=Manugu%20Orifha" target="_blank" rel="noopener noreferrer">Open Facebook</a>
+                        <button type="button" class="contact-action" data-copy="Manugu Orifha">Copy name</button>
+                    </div>
+                </div>
+            </div>
+
+            <p class="contact-note">
+                Replies usually within 24–48 hours on weekdays.
+                Always confirm APS on the official university website.
+            </p>
+
+            <div style="text-align:center; margin-top:1.25rem;">
+                <a href="index.html" class="btn-secondary" style="text-decoration:none;">Back to home</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="copy-toast" id="copyToast">Copied</div>
+
+    <script>
+      (function () {
+        const menuBtn = document.getElementById('menuBtn');
+        const menu = document.getElementById('sideMenu');
+        const backdrop = document.getElementById('menuBackdrop');
+        function openMenu() {
+          menu.hidden = false;
+          backdrop.hidden = false;
+          requestAnimationFrame(function () {
+            menu.classList.add('open');
+            backdrop.classList.add('open');
+          });
+        }
+        function closeMenu() {
+          menu.classList.remove('open');
+          backdrop.classList.remove('open');
+          setTimeout(function () {
+            menu.hidden = true;
+            backdrop.hidden = true;
+          }, 200);
+        }
+        menuBtn.addEventListener('click', function () {
+          if (menu.classList.contains('open')) closeMenu();
+          else openMenu();
+        });
+        backdrop.addEventListener('click', closeMenu);
+
+        const btn = document.getElementById('themeToggle');
+        function applyIcon() {
+          const light = document.documentElement.classList.contains('light');
+          const icon = btn.querySelector('.theme-icon');
+          const label = btn.querySelector('.theme-label');
+          if (icon) icon.textContent = light ? '🌙' : '☀️';
+          if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+        }
+        applyIcon();
+        btn.addEventListener('click', function () {
+          document.documentElement.classList.toggle('light');
+          const light = document.documentElement.classList.contains('light');
+          localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+          applyIcon();
+        });
+
+        const toast = document.getElementById('copyToast');
+        function showToast(msg) {
+          toast.textContent = msg;
+          toast.classList.add('show');
+          setTimeout(function () { toast.classList.remove('show'); }, 1600);
+        }
+        document.querySelectorAll('[data-copy]').forEach(function (el) {
+          el.addEventListener('click', function () {
+            const text = el.getAttribute('data-copy');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(function () { showToast('Copied'); });
+            } else {
+              showToast(text);
+            }
+          });
+        });
+      })();
+    </script>
+</body>
+</html>

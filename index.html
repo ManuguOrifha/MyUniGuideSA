@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyUniGuideSA · Home</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+      (function () {
+        const t = localStorage.getItem('uniPath_theme') || 'dark';
+        if (t === 'light') document.documentElement.classList.add('light');
+      })();
+    </script>
+    <style>
+      .home-hero { text-align: center; padding: 1.5rem 0.5rem 1.25rem; }
+      .home-hero h2 {
+        font-size: 1.55rem; color: var(--heading);
+        margin-bottom: 0.6rem; justify-content: center;
+      }
+      .home-hero p {
+        color: var(--text-muted); font-size: 1.02rem; line-height: 1.55;
+        max-width: 34rem; margin: 0 auto;
+      }
+      .home-cta {
+        display: flex; flex-wrap: wrap; gap: 0.6rem;
+        justify-content: center; margin: 1.35rem 0 1rem;
+      }
+      .home-cta a {
+        text-decoration: none; display: inline-flex; align-items: center;
+        justify-content: center; padding: 0.85rem 1.4rem;
+        border-radius: 40px; font-weight: 600; font-size: 0.95rem;
+      }
+      .home-cta .btn-primary { width: auto; margin: 0; }
+      .feature-grid { display: grid; gap: 0.75rem; margin-top: 0.25rem; }
+      @media (min-width: 640px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
+      .feature-card {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: 16px; padding: 1rem 1.1rem; text-align: left;
+      }
+      .feature-card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 0.35rem; }
+      .feature-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.45; margin: 0; }
+      .how-list {
+        margin: 0.5rem 0 0; padding-left: 1.2rem;
+        color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;
+      }
+      .how-list li { margin-bottom: 0.35rem; }
+      .home-note {
+        margin-top: 0; padding: 0.9rem 1rem; border-radius: 14px;
+        background: var(--surface2); border: 1px solid var(--border);
+        color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; text-align: center;
+      }
+      .top-bar { margin-left: 2.8rem; }
+      @media (max-width: 700px) {
+        .top-bar { margin-left: 2.6rem; }
+        .home-hero h2 { font-size: 1.3rem; }
+      }
+    </style>
+</head>
+<body>
+    <button type="button" class="menu-btn menu-btn-fixed" id="menuBtn" aria-label="Open menu" title="Menu">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+    </button>
+
+    <div class="side-menu-backdrop" id="menuBackdrop" hidden></div>
+    <nav class="side-menu" id="sideMenu" aria-label="Main menu" hidden>
+        <div class="side-menu-header">Menu</div>
+        <a class="side-menu-item active" href="index.html">Home</a>
+        <a class="side-menu-item" href="details.html">Your details</a>
+        <a class="side-menu-item" href="courses.html">Your courses</a>
+        <a class="side-menu-item" href="contact.html">Contact</a>
+    </nav>
+
+    <div class="app-container">
+        <div class="top-bar">
+            <h1>MyUniGuideSA</h1>
+            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
+                <span class="theme-icon">☀️</span>
+                <span class="theme-label">Light mode</span>
+            </button>
+        </div>
+        <div class="subhead">Your guide to South African university courses.</div>
+
+        <div class="card single-card">
+            <div class="home-hero">
+                <h2>Find courses you can qualify for</h2>
+                <p>
+                  MyUniGuideSA helps Grade 10–12 learners match their subject marks and APS
+                  to undergraduate programmes at all 26 public universities in South Africa.
+                </p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>APS calculator</h3>
+                    <p>Live APS from your best 6 subjects (Life Orientation excluded), using the standard NSC points scale.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>26 universities</h3>
+                    <p>Browse programmes from UCT, Wits, Stellenbosch, UP, UJ, UKZN, UFS, NWU, and every other public university.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Qualified vs not yet</h3>
+                    <p>See which courses match your APS and subject minima — green for qualified, red when you still need higher marks.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Jobs & salaries</h3>
+                    <p>Each course includes typical career paths and estimated monthly salary ranges in South Africa.</p>
+                </div>
+            </div>
+
+            <h2 style="margin-top:1.5rem; margin-bottom:0.5rem; font-size:1.15rem;">How it works</h2>
+            <ol class="how-list">
+                <li>Enter your name, grade, subjects and marks (minimum 7 subjects).</li>
+                <li>We calculate your APS and check each course’s published requirements.</li>
+                <li>Explore universities, filter “Qualified only”, and open a course for description, jobs and gaps.</li>
+            </ol>
+
+            <div class="home-cta">
+                <a class="btn-primary" href="details.html">Start — enter my details</a>
+            </div>
+
+            <p class="home-note">
+                Guidance only — APS and subject minima change by year and campus.
+                Always confirm on the official university prospectus before you apply.
+            </p>
+        </div>
+    </div>
+
+    <script>
+      (function () {
+        const menuBtn = document.getElementById('menuBtn');
+        const menu = document.getElementById('sideMenu');
+        const backdrop = document.getElementById('menuBackdrop');
+        function openMenu() {
+          menu.hidden = false;
+          backdrop.hidden = false;
+          requestAnimationFrame(function () {
+            menu.classList.add('open');
+            backdrop.classList.add('open');
+          });
+        }
+        function closeMenu() {
+          menu.classList.remove('open');
+          backdrop.classList.remove('open');
+          setTimeout(function () {
+            menu.hidden = true;
+            backdrop.hidden = true;
+          }, 200);
+        }
+        menuBtn.addEventListener('click', function () {
+          if (menu.classList.contains('open')) closeMenu();
+          else openMenu();
+        });
+        backdrop.addEventListener('click', closeMenu);
+
+        const btn = document.getElementById('themeToggle');
+        function applyIcon() {
+          const light = document.documentElement.classList.contains('light');
+          const icon = btn.querySelector('.theme-icon');
+          const label = btn.querySelector('.theme-label');
+          if (icon) icon.textContent = light ? '🌙' : '☀️';
+          if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+        }
+        applyIcon();
+        btn.addEventListener('click', function () {
+          document.documentElement.classList.toggle('light');
+          const light = document.documentElement.classList.contains('light');
+          localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+          applyIcon();
+        });
+      })();
+    </script>
+</body>
+</html>

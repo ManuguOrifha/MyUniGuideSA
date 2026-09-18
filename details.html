@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyUniGuideSA · Your Details</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyALx3cRijxMZYp-d7-1oYACBkb6HgY1iWc",
+        authDomain: "unipath-sa-5d249.firebaseapp.com",
+        projectId: "unipath-sa-5d249",
+        storageBucket: "unipath-sa-5d249.firebasestorage.app",
+        messagingSenderId: "384264770314",
+        appId: "1:384264770314:web:4259384b0f40aff735e0f3"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+    <script>
+      (function () {
+        const t = localStorage.getItem('uniPath_theme') || 'dark';
+        if (t === 'light') document.documentElement.classList.add('light');
+      })();
+    </script>
+</head>
+<body>
+    <button type="button" class="menu-btn menu-btn-fixed" id="menuBtn" aria-label="Open menu" title="Menu">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+    </button>
+
+    <div class="side-menu-backdrop" id="menuBackdrop" hidden></div>
+    <nav class="side-menu" id="sideMenu" aria-label="Main menu" hidden>
+        <div class="side-menu-header">Menu</div>
+        <a class="side-menu-item" href="index.html">Home</a>
+        <a class="side-menu-item active" href="details.html">Your details</a>
+        <a class="side-menu-item" href="courses.html">Your courses</a>
+        <a class="side-menu-item" href="contact.html">Contact</a>
+    </nav>
+
+    <div class="app-container">
+        <div class="top-bar">
+            <h1>MyUniGuideSA</h1>
+            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
+                <span class="theme-icon">☀️</span>
+                <span class="theme-label">Light mode</span>
+            </button>
+        </div>
+        <div class="subhead">Step 1 of 2 — Enter your details and subject marks.</div>
+
+        <div class="page-nav">
+            <span class="nav-step active">1. Your Details</span>
+            <span class="nav-arrow">→</span>
+            <span class="nav-step">2. Your Courses</span>
+        </div>
+
+        <div class="card single-card">
+            <h2>Your details</h2>
+
+            <div class="field-group">
+                <label for="fullName">Full name</label>
+                <input type="text" id="fullName" placeholder="e.g. Manugu Tondani" autocomplete="off">
+            </div>
+
+            <div class="field-group">
+                <label for="grade">Grade</label>
+                <select id="grade">
+                    <option value="">— Select grade —</option>
+                    <option value="10">Grade 10</option>
+                    <option value="11">Grade 11</option>
+                    <option value="12">Grade 12</option>
+                </select>
+            </div>
+
+            <div class="field-group">
+                <div class="subjects-header">
+                    <span>Subjects & marks (%) — minimum 7 subjects</span>
+                    <button type="button" class="btn-small" id="addSubjectBtn">+ Add subject</button>
+                </div>
+                <div id="subjectsContainer"></div>
+                <p class="hint-text">
+                    <strong>Home Language</strong>, <strong>First Additional Language</strong> and
+                    <strong>Life Orientation</strong> are compulsory. Add at least 4 more subjects (7 total).
+                </p>
+            </div>
+
+            <div id="apsLive" class="aps-live" aria-live="polite">
+                <span class="aps-live-label">Your APS</span>
+                <span class="aps-live-value">0</span>
+                <span class="aps-live-hint">(best 6 subjects · LO excluded)</span>
+            </div>
+
+            <button class="btn-primary" id="goBtn">Go — show my courses</button>
+            <p class="hint-text center">Your details are saved in this browser and to Firebase.</p>
+        </div>
+    </div>
+
+    <script src="details.js"></script>
+    <script>
+      (function () {
+        const menuBtn = document.getElementById('menuBtn');
+        const menu = document.getElementById('sideMenu');
+        const backdrop = document.getElementById('menuBackdrop');
+        function openMenu() {
+          menu.hidden = false;
+          backdrop.hidden = false;
+          requestAnimationFrame(function () {
+            menu.classList.add('open');
+            backdrop.classList.add('open');
+          });
+        }
+        function closeMenu() {
+          menu.classList.remove('open');
+          backdrop.classList.remove('open');
+          setTimeout(function () {
+            menu.hidden = true;
+            backdrop.hidden = true;
+          }, 200);
+        }
+        menuBtn.addEventListener('click', function () {
+          if (menu.classList.contains('open')) closeMenu();
+          else openMenu();
+        });
+        backdrop.addEventListener('click', closeMenu);
+
+        const btn = document.getElementById('themeToggle');
+        function applyIcon() {
+          const light = document.documentElement.classList.contains('light');
+          const icon = btn.querySelector('.theme-icon');
+          const label = btn.querySelector('.theme-label');
+          if (icon) icon.textContent = light ? '🌙' : '☀️';
+          if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+          btn.title = light ? 'Switch to dark mode' : 'Switch to light mode';
+        }
+        applyIcon();
+        btn.addEventListener('click', function () {
+          document.documentElement.classList.toggle('light');
+          const light = document.documentElement.classList.contains('light');
+          localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+          applyIcon();
+        });
+      })();
+    </script>
+</body>
+</html>
