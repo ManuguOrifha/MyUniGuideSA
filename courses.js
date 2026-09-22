@@ -1,4 +1,3 @@
-// ============================================================
 // COURSES PAGE — expanded & improved descriptions
 // 26 public SA universities · representative undergraduate programmes
 // APS & subject minima are typical published ranges — always verify
@@ -2389,6 +2388,43 @@ function slugifyUniversity(name) {
         .replace(/(^-|-$)/g, '');
 }
 
+
+function uniLogoHtml(name) {
+    const short = (name || '?')
+        .replace(/^University of (the )?/i, '')
+        .replace(/^North-West University$/i, 'NWU')
+        .replace(/^Rhodes University$/i, 'RU')
+        .replace(/^Stellenbosch University$/i, 'SU')
+        .replace(/^University of Johannesburg$/i, 'UJ')
+        .replace(/^University of Pretoria$/i, 'UP')
+        .replace(/^University of Cape Town$/i, 'UCT')
+        .replace(/^University of the Witwatersrand$/i, 'Wits')
+        .replace(/^University of KwaZulu-Natal$/i, 'UKZN')
+        .replace(/^University of the Free State$/i, 'UFS')
+        .replace(/^University of the Western Cape$/i, 'UWC')
+        .replace(/^Nelson Mandela University$/i, 'NMU')
+        .replace(/^Tshwane University of Technology$/i, 'TUT')
+        .replace(/^Cape Peninsula University of Technology$/i, 'CPUT')
+        .replace(/^Durban University of Technology$/i, 'DUT')
+        .replace(/^Vaal University of Technology$/i, 'VUT')
+        .replace(/^University of South Africa$/i, 'UNISA')
+        .replace(/^University of Limpopo$/i, 'UL')
+        .replace(/^University of Venda$/i, 'Univen')
+        .replace(/^University of Zululand$/i, 'Unizulu')
+        .replace(/^Sol Plaatje University$/i, 'SPU')
+        .replace(/^University of Mpumalanga$/i, 'UMP')
+        .replace(/^Sefako Makgatho Health Sciences University$/i, 'SMU')
+        .replace(/^Mangosuthu University of Technology$/i, 'MUT')
+        .replace(/^Walter Sisulu University$/i, 'WSU')
+        .replace(/^University of Fort Hare$/i, 'UFH');
+    const letters = short.length <= 6 ? short : short.split(/\s+/).map(w => w[0] || '').join('').slice(0, 4).toUpperCase();
+    const colors = ['#1d4ed8','#0f766e','#b45309','#7c3aed','#be123c','#0369a1','#15803d','#c2410c'];
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    const bg = colors[h % colors.length];
+    return `<span class="uni-logo" style="background:${bg}" title="${escapeHtml(name)}">${escapeHtml(letters)}</span>`;
+}
+
 function renderResults(aps, recommendations, learnerName, grade) {
     let qualifiedCount = 0;
     let totalCount = 0;
@@ -2436,16 +2472,20 @@ function renderResults(aps, recommendations, learnerName, grade) {
             : '';
 
         html += `<div class="university-block" id="${uniId}">`;
+        const logo = uniLogoHtml(uni.university);
         html += `<div class="university-header">
             <div class="uni-header-left">
-              <span class="uni-title">${ICONS.uni} ${escapeHtml(uni.university)}</span>
+              ${logo}
+              <span class="uni-title">${escapeHtml(uni.university)}</span>
               ${provinceTag}
             </div>
         </div>`;
 
-        uni.faculties.forEach(faculty => {
-            html += `<div class="faculty-block">`;
+        uni.faculties.forEach((faculty, fIdx) => {
+            const facId = `${uniId}-fac-${fIdx}`;
+            html += `<div class="faculty-block open" data-fac-id="${facId}">`;
             html += `<div class="faculty-header">${ICONS.book} ${escapeHtml(faculty.facultyName)}</div>`;
+            html += `<div class="faculty-body">`;
 
             faculty.courses.forEach((course, idx) => {
                 const courseId = `course-${Date.now()}-${Math.random().toString(36).substr(2, 6)}-${idx}`;
@@ -2460,7 +2500,7 @@ function renderResults(aps, recommendations, learnerName, grade) {
                     course.requirements.forEach(req => {
                         const missingForReq = course.reqCheck.missing.find(m => m.subject === req.subject);
                         const passed = !missingForReq;
-                        const icon = passed ? '✅' : '❌';
+                        const icon = passed ? '✓' : '✕';
                         const detail = missingForReq
                             ? `<span class="req-fail"> (${missingForReq.reason}, need ${missingForReq.required}%)</span>`
                             : '';

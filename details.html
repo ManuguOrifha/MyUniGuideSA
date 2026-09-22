@@ -94,8 +94,8 @@
             </div>
 
             <button class="btn-primary" id="goBtn">Go — show my courses</button>
-            <p class="hint-text center"></p>
-         </div>
+            <p class="hint-text center">Your details are saved in this browser and to Firebase.</p>
+        </div>
     </div>
 
     <script src="details.js"></script>
@@ -133,7 +133,6 @@
           const label = btn.querySelector('.theme-label');
           if (icon) icon.textContent = light ? '🌙' : '☀️';
           if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
-          btn.title = light ? 'Switch to dark mode' : 'Switch to light mode';
         }
         applyIcon();
         btn.addEventListener('click', function () {
