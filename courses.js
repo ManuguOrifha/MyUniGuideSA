@@ -1,3 +1,4 @@
+// ============================================================
 // COURSES PAGE — expanded & improved descriptions
 // 26 public SA universities · representative undergraduate programmes
 // APS & subject minima are typical published ranges — always verify
@@ -2522,9 +2523,11 @@ function renderResults(aps, recommendations, learnerName, grade) {
                             <span class="course-name">${escapeHtml(course.name)}</span>
                             <span class="course-aps">APS ${course.aps}</span>
                             ${course.duration ? `<span class="course-duration">${ICONS.clock} ${escapeHtml(course.duration)}</span>` : ''}
-                            ${badge}
                         </div>
-                        <button type="button" class="arrow-btn" data-target="${courseId}" aria-expanded="false">▼</button>
+                        <div class="course-right">
+                            ${badge}
+                            <button type="button" class="arrow-btn" data-target="${courseId}" aria-expanded="false">▼</button>
+                        </div>
                     </div>
                     <div class="course-desc" id="${courseId}" hidden>
                         ${(() => { const fj = formatJobsHtml(course.description); return `<p><strong>About this course:</strong> ${escapeHtml(fj.about)}</p>${fj.jobsHtml}`; })()}
@@ -2559,14 +2562,26 @@ function renderResults(aps, recommendations, learnerName, grade) {
                 if (btn) { btn.textContent = '▼'; btn.setAttribute('aria-expanded', 'false'); }
             }
         });
-        // Hide empty faculty blocks
+        // Faculties: hide only if no visible courses; keep university + logo if any course matches
         document.querySelectorAll('.faculty-block').forEach(fac => {
-            const visible = Array.from(fac.querySelectorAll('.course-wrap')).some(w => w.style.display !== 'none');
+            const wraps = fac.querySelectorAll('.course-wrap');
+            const visible = Array.from(wraps).some(w => w.style.display !== 'none');
             fac.style.display = visible ? '' : 'none';
+            // ensure faculty body stays open when visible
+            if (visible) {
+                fac.classList.add('open');
+                const body = fac.querySelector('.faculty-body');
+                if (body) body.style.display = '';
+            }
         });
         document.querySelectorAll('.university-block').forEach(block => {
             const visible = Array.from(block.querySelectorAll('.course-wrap')).some(w => w.style.display !== 'none');
             block.style.display = visible ? '' : 'none';
+            // force header (logo) visible when block is shown
+            if (visible) {
+                const header = block.querySelector('.university-header');
+                if (header) header.style.display = '';
+            }
         });
     }
 

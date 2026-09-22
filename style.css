@@ -1484,3 +1484,133 @@ html.light .course-not-qualified {
         font-size: 0.55rem;
     }
 }
+
+/* Course row: badge on the right (phones + desktop) */
+.course-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+.course-info {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.course-name {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.course-info .badge {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+.arrow-btn {
+    flex-shrink: 0;
+    margin-left: 0.15rem;
+}
+
+@media (max-width: 700px) {
+    .course-item {
+        display: grid !important;
+        grid-template-columns: 1fr auto auto;
+        grid-template-areas:
+            "name badge arrow"
+            "meta meta arrow";
+        align-items: center;
+        column-gap: 0.4rem;
+        row-gap: 0.25rem;
+        padding: 0.55rem 0.65rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .course-info {
+        display: contents !important;
+    }
+    .course-name {
+        grid-area: name;
+        font-size: 0.88rem;
+        line-height: 1.25;
+        padding-right: 0.25rem;
+    }
+    .course-aps,
+    .course-duration {
+        grid-area: meta;
+        display: inline-flex;
+        margin-right: 0.25rem;
+    }
+    .course-info .badge,
+    .badge {
+        grid-area: badge;
+        justify-self: end;
+        margin-left: 0 !important;
+        flex-shrink: 0;
+    }
+    .arrow-btn {
+        grid-area: arrow;
+        justify-self: end;
+        align-self: center;
+    }
+    .university-header {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .university-block {
+        display: block !important;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+    .uni-logo {
+        flex-shrink: 0;
+    }
+}
+
+.course-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+@media (max-width: 700px) {
+    .course-item {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.4rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .course-info {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start;
+        gap: 0.25rem;
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+    .course-name {
+        width: 100%;
+        font-size: 0.88rem;
+    }
+    .course-right {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.25rem;
+        margin-left: 0.35rem;
+    }
+}
