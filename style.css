@@ -1614,3 +1614,34 @@ html.light .course-not-qualified {
         margin-left: 0.35rem;
     }
 }
+/* Real university emblems from /logos/ */
+.uni-logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.35rem;
+    height: 2.35rem;
+}
+.uni-logo-img {
+    width: 2.35rem;
+    height: 2.35rem;
+    object-fit: contain;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 2px;
+    display: block;
+}
+.uni-logo-fallback {
+    width: 2.35rem;
+    height: 2.35rem;
+}
+@media (max-width: 700px) {
+    .uni-logo-wrap,
+    .uni-logo-img,
+    .uni-logo-fallback {
+        width: 2.1rem;
+        height: 2.1rem;
+    }
+}

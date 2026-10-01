@@ -2390,41 +2390,95 @@ function slugifyUniversity(name) {
 }
 
 
-function uniLogoHtml(name) {
+function uniLogoShort(name) {
+    const map = {
+        'University of Cape Town': 'UCT',
+        'University of the Witwatersrand': 'Wits',
+        'Stellenbosch University': 'SU',
+        'University of Pretoria': 'UP',
+        'University of Johannesburg': 'UJ',
+        'North-West University': 'NWU',
+        'University of KwaZulu-Natal': 'UKZN',
+        'Rhodes University': 'RU',
+        'University of the Free State': 'UFS',
+        'University of the Western Cape': 'UWC',
+        'Nelson Mandela University': 'NMU',
+        'University of Fort Hare': 'UFH',
+        'University of Limpopo': 'UL',
+        'University of Venda': 'Univen',
+        'University of Zululand': 'Unizulu',
+        'Walter Sisulu University': 'WSU',
+        'University of South Africa': 'UNISA',
+        'Tshwane University of Technology': 'TUT',
+        'Cape Peninsula University of Technology': 'CPUT',
+        'Durban University of Technology': 'DUT',
+        'Vaal University of Technology': 'VUT',
+        'Central University of Technology': 'CUT',
+        'Mangosuthu University of Technology': 'MUT',
+        'Sol Plaatje University': 'SPU',
+        'University of Mpumalanga': 'UMP',
+        'Sefako Makgatho Health Sciences University': 'SMU'
+    };
+    if (map[name]) return map[name];
     const short = (name || '?')
         .replace(/^University of (the )?/i, '')
-        .replace(/^North-West University$/i, 'NWU')
-        .replace(/^Rhodes University$/i, 'RU')
-        .replace(/^Stellenbosch University$/i, 'SU')
-        .replace(/^University of Johannesburg$/i, 'UJ')
-        .replace(/^University of Pretoria$/i, 'UP')
-        .replace(/^University of Cape Town$/i, 'UCT')
-        .replace(/^University of the Witwatersrand$/i, 'Wits')
-        .replace(/^University of KwaZulu-Natal$/i, 'UKZN')
-        .replace(/^University of the Free State$/i, 'UFS')
-        .replace(/^University of the Western Cape$/i, 'UWC')
-        .replace(/^Nelson Mandela University$/i, 'NMU')
-        .replace(/^Tshwane University of Technology$/i, 'TUT')
-        .replace(/^Cape Peninsula University of Technology$/i, 'CPUT')
-        .replace(/^Durban University of Technology$/i, 'DUT')
-        .replace(/^Vaal University of Technology$/i, 'VUT')
-        .replace(/^University of South Africa$/i, 'UNISA')
-        .replace(/^University of Limpopo$/i, 'UL')
-        .replace(/^University of Venda$/i, 'Univen')
-        .replace(/^University of Zululand$/i, 'Unizulu')
-        .replace(/^Sol Plaatje University$/i, 'SPU')
-        .replace(/^University of Mpumalanga$/i, 'UMP')
-        .replace(/^Sefako Makgatho Health Sciences University$/i, 'SMU')
-        .replace(/^Mangosuthu University of Technology$/i, 'MUT')
-        .replace(/^Walter Sisulu University$/i, 'WSU')
-        .replace(/^University of Fort Hare$/i, 'UFH');
-    const letters = short.length <= 6 ? short : short.split(/\s+/).map(w => w[0] || '').join('').slice(0, 4).toUpperCase();
+        .replace(/^University Of (the )?/i, '');
+    if (short.length <= 6) return short;
+    return short.split(/\s+/).map(w => w[0] || '').join('').slice(0, 4).toUpperCase();
+}
+
+function uniLogoFile(name) {
+    const files = {
+        'University of Cape Town': 'uct',
+        'University of the Witwatersrand': 'wits',
+        'Stellenbosch University': 'stellenbosch',
+        'University of Pretoria': 'up',
+        'University of Johannesburg': 'uj',
+        'North-West University': 'nwu',
+        'University of KwaZulu-Natal': 'ukzn',
+        'Rhodes University': 'rhodes',
+        'University of the Free State': 'ufs',
+        'University of the Western Cape': 'uwc',
+        'Nelson Mandela University': 'nmu',
+        'University of Fort Hare': 'ufh',
+        'University of Limpopo': 'ul',
+        'University of Venda': 'univen',
+        'University of Zululand': 'unizulu',
+        'Walter Sisulu University': 'wsu',
+        'University of South Africa': 'unisa',
+        'Tshwane University of Technology': 'tut',
+        'Cape Peninsula University of Technology': 'cput',
+        'Durban University of Technology': 'dut',
+        'Vaal University of Technology': 'vut',
+        'Central University of Technology': 'cut',
+        'Mangosuthu University of Technology': 'mut',
+        'Sol Plaatje University': 'spu',
+        'University of Mpumalanga': 'ump',
+        'Sefako Makgatho Health Sciences University': 'smu'
+    };
+    return files[name] || null;
+}
+
+function uniLogoHtml(name) {
+    const letters = uniLogoShort(name);
     const colors = ['#1d4ed8','#0f766e','#b45309','#7c3aed','#be123c','#0369a1','#15803d','#c2410c'];
     let h = 0;
-    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    for (let i = 0; i < (name || '').length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
     const bg = colors[h % colors.length];
-    return `<span class="uni-logo" style="background:${bg}" title="${escapeHtml(name)}">${escapeHtml(letters)}</span>`;
+    const file = uniLogoFile(name);
+    const safeName = escapeHtml(name || '');
+    const safeLetters = escapeHtml(letters);
+    if (file) {
+        return '<span class="uni-logo-wrap" title="' + safeName + '">' +
+            '<img class="uni-logo-img" src="logos/' + file + '.jpeg" alt="' + safeLetters + '" ' +
+            'data-base="logos/' + file + '" ' +
+            'onerror="window.__uniLogoFallback&&window.__uniLogoFallback(this)" />' +
+            '<span class="uni-logo uni-logo-fallback" style="background:' + bg + ';display:none">' + safeLetters + '</span>' +
+            '</span>';
+    }
+    return '<span class="uni-logo" style="background:' + bg + '" title="' + safeName + '">' + safeLetters + '</span>';
 }
+
 
 function renderResults(aps, recommendations, learnerName, grade) {
     let qualifiedCount = 0;
