@@ -475,7 +475,7 @@ async function handleGo() {
     }
 
     goBtn.disabled = true;
-    goBtn.textContent = 'Saving…';
+    goBtn.textContent = 'Getting in…';
 
     try {
         await saveLearner(name, grade, subjects);
