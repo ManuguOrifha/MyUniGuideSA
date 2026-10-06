@@ -1645,3 +1645,20 @@ html.light .course-not-qualified {
         height: 2.1rem;
     }
 }
+
+/* University-specific admission score on results */
+.uni-score-pill {
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 20px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    margin-left: 0.25rem;
+}
+html.light .uni-score-pill {
+    background: var(--accent);
+    color: #fff;
+}

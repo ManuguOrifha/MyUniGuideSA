@@ -370,8 +370,8 @@ function calculateAPS(subjects) {
     const marks = academic.map(s => s.mark).sort((a, b) => b - a).slice(0, 6);
     let aps = 0;
     marks.forEach(mark => {
-        if (mark >= 90) aps += 8;
-        else if (mark >= 80) aps += 7;
+        // Official NSC 1–7 scale (80%+ = 7). University-specific scores are calculated on the courses page.
+        if (mark >= 80) aps += 7;
         else if (mark >= 70) aps += 6;
         else if (mark >= 60) aps += 5;
         else if (mark >= 50) aps += 4;
