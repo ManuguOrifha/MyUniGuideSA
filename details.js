@@ -95,6 +95,90 @@ const apsLiveEl = document.getElementById('apsLive');
 let homeLanguageSelect = null;
 let falSelect = null;
 
+// ============================================================
+// RESTORE — pre-fill form ONLY within the current browser session.
+// Fresh visits get a blank form because sessionStorage is empty.
+// Closing the tab clears sessionStorage automatically.
+// ============================================================
+function restoreSavedDetails() {
+    const savedName = sessionStorage.getItem('uniPath_session_name');
+    const savedGrade = sessionStorage.getItem('uniPath_session_grade');
+    const savedSubjectsRaw = sessionStorage.getItem('uniPath_session_subjects');
+
+    // Nothing in THIS session → leave form blank
+    if (!savedName || !savedGrade || !savedSubjectsRaw) {
+        return false;
+    }
+
+    let savedSubjects;
+    try {
+        savedSubjects = JSON.parse(savedSubjectsRaw);
+    } catch (e) {
+        return false;
+    }
+    if (!Array.isArray(savedSubjects) || !savedSubjects.length) {
+        return false;
+    }
+
+    // --- Name & grade ---
+    fullNameInput.value = savedName;
+    gradeSelect.value = savedGrade;
+
+    // --- Home Language ---
+    const hlEntry = savedSubjects.find(s => s.role === 'homeLanguage');
+    if (hlEntry && homeLanguageSelect) {
+        homeLanguageSelect.value = hlEntry.subject;
+        const hlMark = homeLanguageSelect.closest('.subject-row').querySelector('.subject-mark');
+        if (hlMark) hlMark.value = hlEntry.mark;
+    }
+
+    // --- FAL (sync options first so the value can be set) ---
+    syncFALOptions();
+    const falEntry = savedSubjects.find(s => s.role === 'firstAdditional');
+    if (falEntry && falSelect) {
+        falSelect.value = falEntry.subject;
+        const falMark = falSelect.closest('.subject-row').querySelector('.subject-mark');
+        if (falMark) falMark.value = falEntry.mark;
+    }
+
+    // --- Life Orientation ---
+    const loEntry = savedSubjects.find(s => s.role === 'lifeOrientation');
+    if (loEntry) {
+        const loRow = subjectsContainer.querySelector('.subject-row[data-role="lifeOrientation"]');
+        if (loRow) {
+            const loMark = loRow.querySelector('.subject-mark');
+            if (loMark) loMark.value = loEntry.mark;
+        }
+    }
+
+    // --- Optional subjects ---
+    const optionalEntries = savedSubjects.filter(s => !s.role);
+    const currentOptionalRows = subjectsContainer.querySelectorAll('.subject-row:not(.locked)').length;
+    const needed = Math.max(4, optionalEntries.length);
+
+    for (let i = currentOptionalRows; i < needed; i++) {
+        addSubjectRow();
+    }
+
+    const optionalRows = subjectsContainer.querySelectorAll('.subject-row:not(.locked)');
+    optionalEntries.forEach((entry, idx) => {
+        const row = optionalRows[idx];
+        if (!row) return;
+        const sel = row.querySelector('.subject-select');
+        const mark = row.querySelector('.subject-mark');
+        if (sel) {
+            fillOptionalSubjectOptions(sel, entry.subject);
+            sel.value = entry.subject;
+        }
+        if (mark) mark.value = entry.mark;
+    });
+
+    refreshAllOptionalSubjectDropdowns();
+    updateLiveAPS();
+    return true;
+}
+
+
 function init() {
     createHomeLanguageRow();
     createFALRow();
@@ -114,7 +198,9 @@ function init() {
 
     syncFALOptions();
     updateLiveAPS();
-    // Intentionally do NOT restore previous details — form starts blank
+    
+     // Restore ONLY if we already saved in this session
+     restoreSavedDetails();
 }
 
 function createHomeLanguageRow() {
@@ -408,9 +494,21 @@ function makeDocIdFromName(name) {
 }
 
 async function saveLearner(name, grade, subjects) {
+    // Real data — used by courses.html
     localStorage.setItem('uniPath_name', name);
     localStorage.setItem('uniPath_grade', grade);
     localStorage.setItem('uniPath_subjects', JSON.stringify(subjects));
+
+    // Session-only mirror — used by details.html to restore the form
+    // within the same tab session. Cleared automatically when tab closes.
+    try {
+        sessionStorage.setItem('uniPath_session_name', name);
+        sessionStorage.setItem('uniPath_session_grade', grade);
+        sessionStorage.setItem('uniPath_session_subjects', JSON.stringify(subjects));
+    } catch (e) {
+        // Some browsers restrict sessionStorage in private mode — non-fatal
+        console.warn('sessionStorage unavailable:', e);
+    }
 
     if (typeof db === 'undefined' || typeof firebase === 'undefined') {
         console.warn('Firebase not loaded — saved to localStorage only.');

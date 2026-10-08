@@ -7734,24 +7734,6 @@ function calculateCUTAPS(subjects) {
     return total; // max 36 (5×7 + 1)
 }
 
-function calculateCUTAPS_old(subjects) {
-    // Original CUT prospectus instructions: take best 6 subjects including LO
-    // where LO is capped at 1 point
-    const normalized = subjects.map(s => ({
-        subject: String(s.subject || '').trim(),
-        mark: Number(s.mark)
-    })).filter(s => s.subject && !Number.isNaN(s.mark));
-
-    const scored = normalized.map(s => {
-        let pts = nscLevel(s.mark);
-        if (/life orientation/i.test(s.subject)) pts = Math.min(pts, 1);
-        return pts;
-    });
-
-    // Best 6 including LO
-    const best6 = scored.sort((a, b) => b - a).slice(0, 6);
-    return best6.reduce((sum, p) => sum + p, 0);
-}
 
 
 /**
