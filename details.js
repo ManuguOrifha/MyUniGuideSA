@@ -48,13 +48,16 @@ const FIRST_ADDITIONAL_LANGUAGES = [
 
 const OTHER_SUBJECTS = [
     "Accounting",
+    "Agricultural Management Practices",
     "Agricultural Sciences",
     "Agricultural Technology",
     "Biblical Studies",
     "Business Studies",
     "Civil Technology",
+    "Commerce",
     "Computer Applications Technology",
     "Consumer Studies",
+    "Dance",
     "Design",
     "Dramatic Arts",
     "Economics",
@@ -73,6 +76,8 @@ const OTHER_SUBJECTS = [
     "Physical Sciences",
     "Religion Studies",
     "Sport and Exercise Science",
+    "Technical Mathematics",
+    "Technical Science",
     "Tourism",
     "Visual Arts"
 ];
