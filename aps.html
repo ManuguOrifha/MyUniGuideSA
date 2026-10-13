@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyUniGuideSA · APS Calculator</title>
+    <link rel="icon" type="image/png" href="logos/favicon-96x96.png?v=20261009" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="logos/favicon.svg?v=20261009" />
+    <link rel="shortcut icon" href="logos/favicon.ico?v=20261009" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logos/apple-touch-icon.png?v=20261009" />
+    <meta name="apple-mobile-web-app-title" content="MyUniGuideSA" />
+    <link rel="manifest" href="logos/site.webmanifest?v=20261009" />
+    <link rel="stylesheet" href="style.css">
+    <script>
+      (function () {
+        const t = localStorage.getItem('uniPath_theme') || 'dark';
+        if (t === 'light') document.documentElement.classList.add('light');
+      })();
+    </script>
+    <style>
+      .aps-hero {
+        text-align: center;
+        padding: 1.75rem 0.5rem 1rem;
+      }
+      .aps-hero h2 {
+        font-size: 1.6rem;
+        color: var(--heading);
+        margin-bottom: 0.6rem;
+        justify-content: center;
+        letter-spacing: -0.02em;
+      }
+      .aps-hero p {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.55;
+        max-width: 42rem;
+        margin: 0 auto;
+      }
+
+      .subject-input-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 1.25rem 1.25rem 1rem;
+        margin-bottom: 1.25rem;
+      }
+      .subject-input-card h3 {
+        font-size: 1.05rem;
+        color: var(--heading);
+        margin-bottom: 0.75rem;
+      }
+      .subject-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 0.55rem 0.7rem;
+        margin-bottom: 0.5rem;
+      }
+      .subject-row.locked {
+        background: var(--surface3);
+        border-color: var(--accent);
+      }
+      .subject-row.locked select {
+        background: var(--surface2);
+        cursor: not-allowed;
+        opacity: 0.95;
+        font-weight: 600;
+      }
+      .subject-row select {
+        flex: 2 1 160px;
+        min-width: 0;
+        padding: 0.55rem 0.65rem;
+        border-radius: 10px;
+        border: 2px solid var(--border);
+        background: var(--input-bg);
+        color: var(--text);
+        font-size: 0.9rem;
+        font-family: inherit;
+      }
+      .subject-row input {
+        flex: 0 0 72px;
+        padding: 0.55rem 0.3rem;
+        text-align: center;
+        border-radius: 10px;
+        border: 2px solid var(--border);
+        background: var(--input-bg);
+        color: var(--text);
+        font-size: 0.9rem;
+        font-family: inherit;
+      }
+      .subject-row input:focus,
+      .subject-row select:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+      .subject-row button.remove {
+        background: #3a1f1f;
+        border: none;
+        border-radius: 10px;
+        width: 32px;
+        height: 32px;
+        color: #f87171;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      html.light .subject-row button.remove {
+        background: #ffe8e8;
+        color: #b33a3a;
+      }
+      .subject-row .lock-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--accent);
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        flex-shrink: 0;
+      }
+      .subject-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .subject-actions button {
+        padding: 0.6rem 1.1rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        cursor: pointer;
+        font-family: inherit;
+        border: 1px solid var(--border);
+      }
+      .btn-add {
+        background: var(--surface2);
+        color: var(--accent);
+      }
+      .btn-add:hover { border-color: var(--accent); }
+      .btn-calc {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+        box-shadow: 0 8px 18px -8px var(--accent);
+      }
+      .btn-calc:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+      }
+      .hint {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+      }
+
+      .result-empty {
+        text-align: center;
+        padding: 1.5rem 1rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        font-style: italic;
+      }
+      .result-error {
+        text-align: center;
+        padding: 1rem;
+        color: #f87171;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .uni-results-grid {
+        display: grid;
+        gap: 0.85rem;
+        margin-top: 1rem;
+      }
+      @media (min-width: 720px) {
+        .uni-results-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (min-width: 1100px) {
+        .uni-results-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+
+      .uni-result-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 1.1rem 1.15rem;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      }
+      .uni-result-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px -12px rgba(59,130,246,0.35);
+      }
+
+      .urc-head {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        margin-bottom: 0.85rem;
+      }
+      .urc-logo-wrap {
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid var(--border);
+      }
+      .urc-logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 3px;
+        display: block;
+      }
+      .urc-logo-fallback {
+        width: 100%;
+        height: 100%;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.7rem;
+        letter-spacing: 0.02em;
+        text-align: center;
+        line-height: 1;
+        padding: 2px;
+      }
+      .urc-name {
+        font-size: 0.95rem;
+        color: var(--heading);
+        line-height: 1.25;
+        margin: 0;
+        font-weight: 700;
+      }
+      .urc-score {
+        font-size: 1.9rem;
+        font-weight: 800;
+        color: var(--accent);
+        line-height: 1;
+        margin-bottom: 0.2rem;
+      }
+      .urc-label {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.6rem;
+      }
+      .urc-note {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        line-height: 1.45;
+        margin-bottom: 0.75rem;
+        flex: 1;
+      }
+      .urc-formula {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        font-style: italic;
+        background: var(--surface2);
+        border-radius: 10px;
+        padding: 0.45rem 0.6rem;
+        margin-top: auto;
+      }
+
+      .top-bar { margin-left: 2.8rem; }
+
+      @media (max-width: 700px) {
+        .top-bar { margin-left: 2.6rem; }
+        .aps-hero h2 { font-size: 1.35rem; }
+        .urc-logo-wrap { width: 40px; height: 40px; }
+        .urc-score { font-size: 1.6rem; }
+      }
+    </style>
+</head>
+<body>
+    <button type="button" class="menu-btn menu-btn-fixed" id="menuBtn" aria-label="Open menu" title="Menu">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+    </button>
+
+    <div class="side-menu-backdrop" id="menuBackdrop" hidden></div>
+    <nav class="side-menu" id="sideMenu" aria-label="Main menu" hidden>
+        <div class="side-menu-header">Menu</div>
+        <a class="side-menu-item" href="index.html">Home</a>
+        <a class="side-menu-item" href="details.html">Your details</a>
+        <a class="side-menu-item" href="courses.html">Your courses</a>
+        <a class="side-menu-item active" href="aps.html">APS Calculator</a>
+        <a class="side-menu-item" href="prospectus.html">Prospectus</a>
+        <a class="side-menu-item" href="contact.html">Contact</a>
+    </nav>
+
+    <div class="app-container">
+        <div class="top-bar">
+            <h1>MyUniGuideSA</h1>
+            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
+                <span class="theme-icon">☀️</span>
+                <span class="theme-label">Light mode</span>
+            </button>
+        </div>
+        <div class="subhead">APS Calculator — see your score for every university’s own method.</div>
+
+        <div class="card single-card" style="padding: 1.25rem 1.5rem 1.75rem;">
+            <div class="aps-hero">
+                <h2>Calculate your APS</h2>
+                <p>
+                    Enter your subjects and marks. We calculate your APS using each South African
+                    university’s own formula — not a single generic score.
+                </p>
+            </div>
+
+            <div class="subject-input-card">
+                <h3>Your subjects</h3>
+                <div id="subjectList"></div>
+
+                <div class="subject-actions">
+                    <button type="button" class="btn-add" id="addSubjectBtn">+ Add subject</button>
+                    <button type="button" class="btn-calc" id="calcBtn">Calculate APS</button>
+                </div>
+                <p class="hint">
+                    Enter at least 7 subjects. Life Orientation is compulsory and included where the university requires it.
+                </p>
+            </div>
+
+            <div id="resultsArea"></div>
+        </div>
+    </div>
+
+    <script>
+      (function () {
+        // ---------- Theme ----------
+        const btn = document.getElementById('themeToggle');
+        function applyIcon() {
+          const light = document.documentElement.classList.contains('light');
+          const icon = btn.querySelector('.theme-icon');
+          const label = btn.querySelector('.theme-label');
+          if (icon) icon.textContent = light ? '🌙' : '☀️';
+          if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+        }
+        applyIcon();
+        btn.addEventListener('click', function () {
+          document.documentElement.classList.toggle('light');
+          const light = document.documentElement.classList.contains('light');
+          localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+          applyIcon();
+        });
+
+        // ---------- Menu ----------
+        const menuBtn = document.getElementById('menuBtn');
+        const menu = document.getElementById('sideMenu');
+        const backdrop = document.getElementById('menuBackdrop');
+        function openMenu() {
+          menu.hidden = false; backdrop.hidden = false;
+          requestAnimationFrame(function () {
+            menu.classList.add('open'); backdrop.classList.add('open');
+          });
+        }
+        function closeMenu() {
+          menu.classList.remove('open'); backdrop.classList.remove('open');
+          setTimeout(function () { menu.hidden = true; backdrop.hidden = true; }, 200);
+        }
+        menuBtn.addEventListener('click', function () {
+          if (menu.classList.contains('open')) closeMenu(); else openMenu();
+        });
+        backdrop.addEventListener('click', closeMenu);
+
+        // ---------- Subject lists ----------
+        const HOME_LANGUAGES = [
+          "Afrikaans Home Language",
+          "English Home Language",
+          "isiNdebele Home Language",
+          "isiXhosa Home Language",
+          "isiZulu Home Language",
+          "Sepedi Home Language",
+          "Sesotho Home Language",
+          "Setswana Home Language",
+          "siSwati Home Language",
+          "Tshivenda Home Language",
+          "Xitsonga Home Language"
+        ];
+
+        const FIRST_ADDITIONAL_LANGUAGES = [
+          "Afrikaans First Additional Language",
+          "English First Additional Language",
+          "isiNdebele First Additional Language",
+          "isiXhosa First Additional Language",
+          "isiZulu First Additional Language",
+          "Sepedi First Additional Language",
+          "Sesotho First Additional Language",
+          "Setswana First Additional Language",
+          "siSwati First Additional Language",
+          "Tshivenda First Additional Language",
+          "Xitsonga First Additional Language"
+        ];
+
+        const OTHER_SUBJECTS = [
+          "Accounting",
+          "Agricultural Management Practices",
+          "Agricultural Sciences",
+          "Agricultural Technology",
+          "Business Studies",
+          "Civil Technology",
+          "Computer Applications Technology",
+          "Consumer Studies",
+          "Dance",
+          "Design",
+          "Dramatic Arts",
+          "Economics",
+          "Electrical Technology",
+          "Engineering Graphics and Design",
+          "Geography",
+          "History",
+          "Hospitality Studies",
+          "Information Technology",
+          "Life Sciences",
+          "Marine Sciences",
+          "Mathematical Literacy",
+          "Mathematics",
+          "Mechanical Technology",
+          "Music",
+          "Physical Sciences",
+          "Religion Studies",
+          "Sport and Exercise Science",
+          "Technical Mathematics",
+          "Technical Science",
+          "Tourism",
+          "Visual Arts"
+        ];
+
+        const list = document.getElementById('subjectList');
+        const addBtn = document.getElementById('addSubjectBtn');
+        const calcBtn = document.getElementById('calcBtn');
+        const resultsArea = document.getElementById('resultsArea');
+
+        // Helper: build a <select> with the given subjects and a placeholder
+        function buildSelect(subjects, placeholderText) {
+          const sel = document.createElement('select');
+          const placeholder = document.createElement('option');
+          placeholder.value = '';
+          placeholder.textContent = placeholderText;
+          placeholder.selected = true;
+          sel.appendChild(placeholder);
+          subjects.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            sel.appendChild(opt);
+          });
+          return sel;
+        }
+
+        // Row: locked Life Orientation
+        function makeLifeOrientationRow() {
+          const row = document.createElement('div');
+          row.className = 'subject-row locked';
+          row.dataset.role = 'lifeOrientation';
+
+          const sel = document.createElement('select');
+          sel.disabled = true;
+          const opt = document.createElement('option');
+          opt.value = 'Life Orientation';
+          opt.textContent = 'Life Orientation';
+          opt.selected = true;
+          sel.appendChild(opt);
+
+          const mark = document.createElement('input');
+          mark.type = 'number';
+          mark.min = 0; mark.max = 100;
+          mark.placeholder = '%';
+          mark.value = '';
+
+          const lock = document.createElement('span');
+          lock.className = 'lock-badge';
+          lock.textContent = 'L';
+          lock.title = 'Life Orientation is compulsory';
+
+          row.appendChild(sel);
+          row.appendChild(mark);
+          row.appendChild(lock);
+          return row;
+        }
+
+        // Row: Home Language only
+        function makeHomeLanguageRow() {
+          const row = document.createElement('div');
+          row.className = 'subject-row';
+          row.dataset.role = 'homeLanguage';
+
+          const sel = buildSelect(HOME_LANGUAGES, '— Choose home language —');
+          const mark = document.createElement('input');
+          mark.type = 'number';
+          mark.min = 0; mark.max = 100;
+          mark.placeholder = '%';
+          mark.value = '';
+
+          const lock = document.createElement('span');
+          lock.className = 'lock-badge';
+          lock.textContent = 'L';
+          lock.title = 'Home Language is compulsory';
+
+          row.appendChild(sel);
+          row.appendChild(mark);
+          row.appendChild(lock);
+          return row;
+        }
+
+        // Row: First Additional Language only
+        function makeFALRow() {
+          const row = document.createElement('div');
+          row.className = 'subject-row';
+          row.dataset.role = 'firstAdditional';
+
+          const sel = buildSelect(FIRST_ADDITIONAL_LANGUAGES, '— Choose additional language —');
+          const mark = document.createElement('input');
+          mark.type = 'number';
+          mark.min = 0; mark.max = 100;
+          mark.placeholder = '%';
+          mark.value = '';
+
+          const lock = document.createElement('span');
+          lock.className = 'lock-badge';
+          lock.textContent = 'L';
+          lock.title = 'First Additional Language is compulsory';
+
+          row.appendChild(sel);
+          row.appendChild(mark);
+          row.appendChild(lock);
+          return row;
+        }
+
+        // Row: free-choice optional subject
+        function makeOptionalRow() {
+          const row = document.createElement('div');
+          row.className = 'subject-row';
+
+          const sel = buildSelect(OTHER_SUBJECTS, '— Choose subject —');
+          const mark = document.createElement('input');
+          mark.type = 'number';
+          mark.min = 0; mark.max = 100;
+          mark.placeholder = '%';
+          mark.value = '';
+
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'remove';
+          remove.textContent = '×';
+          remove.addEventListener('click', () => {
+            if (list.querySelectorAll('.subject-row').length > 7) row.remove();
+          });
+
+          row.appendChild(sel);
+          row.appendChild(mark);
+          row.appendChild(remove);
+          return row;
+        }
+
+        // Build the initial form:
+        // 1. Life Orientation (locked)
+        // 2. Home Language (only HL options)
+        // 3. First Additional Language (only FAL options)
+        // 4-7. Four optional rows
+        function initRows() {
+          list.innerHTML = '';
+          list.appendChild(makeLifeOrientationRow());
+          list.appendChild(makeHomeLanguageRow());
+          list.appendChild(makeFALRow());
+          for (let i = 0; i < 4; i++) list.appendChild(makeOptionalRow());
+        }
+
+        addBtn.addEventListener('click', () => {
+          if (list.querySelectorAll('.subject-row').length >= 12) return;
+          list.appendChild(makeOptionalRow());
+        });
+
+        // ---------- APS helpers ----------
+        function nscLevel(mark) {
+          if (mark >= 80) return 7;
+          if (mark >= 70) return 6;
+          if (mark >= 60) return 5;
+          if (mark >= 50) return 4;
+          if (mark >= 40) return 3;
+          if (mark >= 30) return 2;
+          if (mark >= 0) return 1;
+          return 0;
+        }
+        function nscLevel8(mark) {
+          if (mark >= 90) return 8;
+          if (mark >= 80) return 7;
+          if (mark >= 70) return 6;
+          if (mark >= 60) return 5;
+          if (mark >= 50) return 4;
+          if (mark >= 40) return 3;
+          if (mark >= 30) return 2;
+          if (mark >= 0) return 1;
+          return 0;
+        }
+        function standardAPS(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation');
+          const top6 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 6);
+          return top6.reduce((sum, m) => sum + nscLevel(m), 0);
+        }
+        function uctFPS(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation' && s.mark >= 40);
+          const top6 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 6);
+          return top6.reduce((sum, m) => sum + m, 0);
+        }
+        function witsAPS(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation');
+          const top6 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 6);
+          let total = top6.reduce((sum, m) => sum + nscLevel(m), 0);
+          const lo = subjects.find(s => s.subject === 'Life Orientation');
+          if (lo && lo.mark >= 60) total += Math.min(nscLevel(lo.mark), 4);
+          const eng = subjects.find(s => /^english/i.test(s.subject));
+          if (eng && eng.mark >= 60) total += 2;
+          const maths = subjects.find(s => s.subject === 'Mathematics');
+          if (maths && maths.mark >= 60) total += 2;
+          return total;
+        }
+        function uwcPoints(subjects) {
+          function pts(mark, type) {
+            if (mark >= 90) return type === 'lang' || type === 'maths' ? 15 : type === 'lo' ? 3 : 8;
+            if (mark >= 80) return type === 'lang' || type === 'maths' ? 13 : type === 'lo' ? 3 : 7;
+            if (mark >= 70) return type === 'lang' || type === 'maths' ? 11 : type === 'lo' ? 2 : 6;
+            if (mark >= 60) return type === 'lang' || type === 'maths' ? 9 : type === 'lo' ? 2 : 5;
+            if (mark >= 50) return type === 'lang' || type === 'maths' ? 7 : type === 'lo' ? 1 : 4;
+            if (mark >= 40) return type === 'lang' || type === 'maths' ? 5 : type === 'lo' ? 1 : 3;
+            if (mark >= 30) return type === 'lang' || type === 'maths' ? 3 : type === 'lo' ? 0 : 2;
+            if (mark >= 20) return type === 'lang' || type === 'maths' ? 1 : type === 'lo' ? 0 : 1;
+            return 0;
+          }
+          const eng = subjects.find(s => /^english/i.test(s.subject));
+          const maths = subjects.find(s => /^mathematics$/i.test(s.subject)) || subjects.find(s => /mathematical literacy/i.test(s.subject));
+          const lo = subjects.find(s => s.subject === 'Life Orientation');
+          const others = subjects
+            .filter(s => s !== eng && s !== maths && s !== lo)
+            .map(s => s.mark).sort((a, b) => b - a).slice(0, 3);
+          let total = 0;
+          if (eng) total += pts(eng.mark, 'lang');
+          if (maths) total += pts(maths.mark, 'maths');
+          if (lo) total += pts(lo.mark, 'lo');
+          others.forEach(m => { total += pts(m, 'other'); });
+          return total;
+        }
+        function ufsCutAPS(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation');
+          const top5 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 5);
+          let total = top5.reduce((sum, m) => sum + nscLevel(m), 0);
+          const lo = subjects.find(s => s.subject === 'Life Orientation');
+          if (lo) total += Math.min(nscLevel(lo.mark), 1);
+          return total;
+        }
+        function aps8(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation');
+          const top6 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 6);
+          return top6.reduce((sum, m) => sum + nscLevel8(m), 0);
+        }
+        function rhodesAPS(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation' && s.mark >= 40);
+          const top6 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 6);
+          const sum = top6.reduce((s, m) => s + m, 0);
+          return Math.round((sum / 10) * 10) / 10;
+        }
+        function stellenboschTPT(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation');
+          if (!acad.length) return 0;
+          let lang = acad.filter(s => /(home language|first additional language)/i.test(s.subject));
+          lang.sort((a, b) => b.mark - a.mark);
+          const langMark = lang.length ? lang[0].mark : acad.map(s => s.mark).sort((a, b) => b - a)[0];
+          const others = acad.filter(s => !(lang.length && s === lang[0])).map(s => s.mark).sort((a, b) => b - a).slice(0, 5);
+          const all = [langMark, ...others];
+          const avg = all.reduce((s, m) => s + m, 0) / all.length;
+          return Math.round(avg * 10) / 10;
+        }
+        function nmuAS(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation' && s.mark >= 40);
+          const top6 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 6);
+          let total = top6.reduce((sum, m) => sum + m, 0);
+          const lo = subjects.find(s => s.subject === 'Life Orientation');
+          if (lo && lo.mark >= 50) total += 7;
+          return total;
+        }
+        function univenAPS(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation' && s.mark >= 40);
+          const top7 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 7);
+          return top7.reduce((sum, m) => sum + nscLevel(m), 0);
+        }
+        function cputAPS(subjects) {
+          const acad = subjects.filter(s => s.subject !== 'Life Orientation');
+          const top6 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 6);
+          const sum = top6.reduce((s, m) => s + m, 0);
+          return Math.round((sum / 10) * 10) / 10;
+        }
+        function spuAPS(subjects) {
+          function pts(mark) {
+            if (mark >= 90) return 8;
+            if (mark >= 80) return 7;
+            if (mark >= 70) return 6;
+            if (mark >= 60) return 5;
+            if (mark >= 50) return 4;
+            if (mark >= 40) return 3;
+            if (mark >= 30) return 2;
+            if (mark >= 10) return 1;
+            return 0;
+          }
+          function bonus(mark) {
+            if (mark >= 70) return 2;
+            if (mark >= 60) return 1;
+            return 0;
+          }
+          const homeLang = subjects.find(s => /home language/i.test(s.subject));
+          const maths = subjects.find(s => /^mathematics$/i.test(s.subject));
+          const scored = subjects.map(s => {
+            let p = pts(s.mark);
+            let b = 0;
+            if (s === homeLang || s === maths) b = bonus(s.mark);
+            if (s.subject === 'Life Orientation') { p = Math.min(p, 4); b = 0; }
+            return { total: p + b };
+          });
+          return scored.sort((a, b) => b.total - a.total).slice(0, 6)
+            .reduce((sum, s) => sum + s.total, 0);
+        }
+
+        // ---------- Logos ----------
+        function uniLogoShort(name) {
+          const map = {
+            'University of Cape Town': 'UCT','University of the Witwatersrand': 'Wits','Stellenbosch University': 'SU','University of Pretoria': 'UP','University of Johannesburg': 'UJ','North-West University': 'NWU','University of KwaZulu-Natal': 'UKZN','Rhodes University': 'RU','University of the Free State': 'UFS','University of the Western Cape': 'UWC','Nelson Mandela University': 'NMU','University of Fort Hare': 'UFH','University of Limpopo': 'UL','University of Venda': 'Univen','University of Zululand': 'Unizulu','Walter Sisulu University': 'WSU','University of South Africa': 'UNISA','Tshwane University of Technology': 'TUT','Cape Peninsula University of Technology': 'CPUT','Durban University of Technology': 'DUT','Vaal University of Technology': 'VUT','Central University of Technology': 'CUT','Mangosuthu University of Technology': 'MUT','Sol Plaatje University': 'SPU','University of Mpumalanga': 'UMP','Sefako Makgatho Health Sciences University': 'SMU'
+          };
+          if (map[name]) return map[name];
+          return name.split(/\s+/).map(w => w[0] || '').join('').slice(0, 4).toUpperCase();
+        }
+        function uniLogoFile(name) {
+          const map = {
+            'University of Cape Town': 'uct','University of the Witwatersrand': 'wits','Stellenbosch University': 'stellenbosch','University of Pretoria': 'up','University of Johannesburg': 'uj','North-West University': 'nwu','University of KwaZulu-Natal': 'ukzn','Rhodes University': 'rhodes','University of the Free State': 'ufs','University of the Western Cape': 'uwc','Nelson Mandela University': 'nmu','University of Fort Hare': 'ufh','University of Limpopo': 'ul','University of Venda': 'univen','University of Zululand': 'unizulu','Walter Sisulu University': 'wsu','University of South Africa': 'unisa','Tshwane University of Technology': 'tut','Cape Peninsula University of Technology': 'cput','Durban University of Technology': 'dut','Vaal University of Technology': 'vut','Central University of Technology': 'cut','Mangosuthu University of Technology': 'mut','Sol Plaatje University': 'spu','University of Mpumalanga': 'ump','Sefako Makgatho Health Sciences University': 'smu'
+          };
+          return map[name] || null;
+        }
+        function uniLogoHtml(name) {
+          const letters = uniLogoShort(name);
+          const colors = ['#1d4ed8','#0f766e','#b45309','#7c3aed','#be123c','#0369a1','#15803d','#c2410c'];
+          let h = 0;
+          for (let i = 0; i < (name || '').length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+          const bg = colors[h % colors.length];
+          const file = uniLogoFile(name);
+          const safeName = name.replace(/"/g, '&quot;');
+          const safeLetters = letters.replace(/"/g, '&quot;');
+          if (file) {
+            return (
+              '<div class="urc-logo-wrap" title="' + safeName + '">' +
+                '<img class="urc-logo-img" src="logos/' + file + '.jpeg" alt="' + safeLetters + '" ' +
+                  'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" />' +
+                '<span class="urc-logo-fallback" style="background:' + bg + '">' + safeLetters + '</span>' +
+              '</div>'
+            );
+          }
+          return '<div class="urc-logo-wrap"><span class="urc-logo-fallback" style="display:flex;background:' + bg + '">' + safeLetters + '</span></div>';
+        }
+
+        // ---------- University definitions ----------
+        const UNIVERSITIES = [
+          { name: "University of Johannesburg",                 score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "University of Pretoria",                     score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "North-West University",                      score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "Tshwane University of Technology",           score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "Vaal University of Technology",              score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "University of Venda",                        score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "Mangosuthu University of Technology",        score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "University of South Africa",                 score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "Cape Peninsula University of Technology",    score: cputAPS,         label: "CPUT APS",            note: "Best 6 % ÷ 10, LO excluded.",           formula: "Sum of top 6 percentages ÷ 10" },
+          { name: "University of the Witwatersrand",            score: witsAPS,         label: "Wits APS",            note: "Best 6 + LO (max 4) + Eng/Maths bonus.", formula: "Top 6 + LO (≤4) + 2 Eng (≥60) + 2 Maths (≥60)" },
+          { name: "University of the Western Cape",             score: uwcPoints,       label: "UWC Points",          note: "English & Maths weighted, LO included.", formula: "Eng (≤15) + Maths (≤15) + LO (≤3) + best 3 others (≤8 each)" },
+          { name: "University of Cape Town",                    score: uctFPS,          label: "UCT FPS",             note: "Direct % sum, LO excluded, max 600.",   formula: "Sum of top 6 percentages (excl LO)" },
+          { name: "Nelson Mandela University",                  score: nmuAS,           label: "NMU Applicant Score", note: "Best 6 % sum, LO excluded, max 600.",   formula: "Top 6 % + 7 bonus if LO ≥ 50%" },
+          { name: "Stellenbosch University",                    score: stellenboschTPT, label: "Stellenbosch TPT",    note: "Average % of best language + 5 others.", formula: "Avg % of best language + best 5 other subjects" },
+          { name: "Rhodes University",                          score: rhodesAPS,       label: "Rhodes APS",          note: "Sum of top 6 % ÷ 10, max 60.",          formula: "Top 6 percentage sum ÷ 10" },
+          { name: "University of KwaZulu-Natal",                score: aps8,            label: "UKZN APS (1–8)",      note: "1–8 scale, best 6, LO excluded.",       formula: "Sum of best 6 on 1–8 scale (90%+ = 8)" },
+          { name: "University of the Free State",               score: ufsCutAPS,       label: "UFS APS",             note: "Best 5 + LO capped at 1.",              formula: "Top 5 + LO (max 1 pt)" },
+          { name: "Central University of Technology",           score: ufsCutAPS,       label: "CUT APS",             note: "Best 5 + LO capped at 1.",              formula: "Top 5 + LO (max 1 pt)" },
+          { name: "University of Fort Hare",                    score: standardAPS,     label: "UFH APS",             note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "University of Limpopo",                      score: standardAPS,     label: "UL APS",              note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "University of Zululand",                     score: standardAPS,     label: "Unizulu APS",         note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "Walter Sisulu University",                   score: standardAPS,     label: "WSU APS",             note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "Durban University of Technology",            score: standardAPS,     label: "DUT APS",             note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "Sol Plaatje University",                     score: spuAPS,          label: "SPU APS",             note: "Best 6 incl. LO, +Maths/HL bonus.",     formula: "Top 6 (incl. LO ≤4) + bonus for Maths/HL" },
+          { name: "University of Mpumalanga",                   score: standardAPS,     label: "UMP APS",             note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+          { name: "Sefako Makgatho Health Sciences University", score: standardAPS,     label: "SMU APS",             note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" }
+        ];
+
+        // ---------- Read subjects ----------
+        function readSubjects() {
+          const rows = list.querySelectorAll('.subject-row');
+          const out = [];
+          rows.forEach(r => {
+            const sel = r.querySelector('select');
+            const mark = r.querySelector('input');
+            const s = sel.value;
+            const m = parseFloat(mark.value);
+            if (s && !isNaN(m) && m >= 0 && m <= 100) {
+              out.push({ subject: s, mark: m });
+            }
+          });
+          return out;
+        }
+
+        // ---------- Validate ----------
+        function validateForm() {
+          const rows = list.querySelectorAll('.subject-row');
+
+          // LO must have a valid mark
+          const loRow = list.querySelector('.subject-row.locked');
+          if (loRow) {
+            const loMark = parseFloat(loRow.querySelector('input').value);
+            if (isNaN(loMark) || loMark < 0 || loMark > 100) {
+              return 'Please enter a valid Life Orientation mark (0–100).';
+            }
+          }
+
+          // Home Language must be chosen with a mark
+          const hlRow = list.querySelector('.subject-row[data-role="homeLanguage"]');
+          if (hlRow) {
+            const hlSubject = hlRow.querySelector('select').value;
+            const hlMark = parseFloat(hlRow.querySelector('input').value);
+            if (!hlSubject) return 'Please choose your Home Language.';
+            if (isNaN(hlMark) || hlMark < 0 || hlMark > 100) {
+              return 'Please enter a valid Home Language mark (0–100).';
+            }
+          }
+
+          // First Additional Language must be chosen with a mark
+          const falRow = list.querySelector('.subject-row[data-role="firstAdditional"]');
+          if (falRow) {
+            const falSubject = falRow.querySelector('select').value;
+            const falMark = parseFloat(falRow.querySelector('input').value);
+            if (!falSubject) return 'Please choose your First Additional Language.';
+            if (isNaN(falMark) || falMark < 0 || falMark > 100) {
+              return 'Please enter a valid First Additional Language mark (0–100).';
+            }
+          }
+
+          // Every optional row that has a subject must have a mark (and vice versa)
+          let filled = 0;
+          for (const r of rows) {
+            if (r.classList.contains('locked')) { filled++; continue; }
+            if (r.dataset.role === 'homeLanguage' || r.dataset.role === 'firstAdditional') {
+              const s = r.querySelector('select').value;
+              const m = parseFloat(r.querySelector('input').value);
+              if (s && !isNaN(m)) filled++;
+              continue;
+            }
+            const subject = r.querySelector('select').value;
+            const markStr = r.querySelector('input').value.trim();
+            const mark = parseFloat(markStr);
+            const hasSubject = !!subject;
+            const hasMark = markStr !== '' && !isNaN(mark) && mark >= 0 && mark <= 100;
+            if (hasSubject && !hasMark) return 'Please enter a valid mark (0–100) for: ' + subject;
+            if (!hasSubject && hasMark) return 'Please choose a subject for every mark you entered.';
+            if (hasSubject && hasMark) filled++;
+          }
+
+          if (filled < 7) return 'Please enter at least 7 subjects with valid marks. You have ' + filled + '.';
+
+          // Duplicate check
+          const seen = new Set();
+          for (const r of rows) {
+            const s = r.querySelector('select').value;
+            if (!s) continue;
+            if (seen.has(s)) return 'You have "' + s + '" more than once. Please remove the duplicate.';
+            seen.add(s);
+          }
+
+          return null;
+        }
+
+        // ---------- Render ----------
+        function renderResults(subjects) {
+          const cards = UNIVERSITIES.map(u => {
+            const s = u.score(subjects);
+            return `<div class="uni-result-card">
+              <div class="urc-head">
+                ${uniLogoHtml(u.name)}
+                <h4 class="urc-name">${u.name}</h4>
+              </div>
+              <div class="urc-score">${s}</div>
+              <div class="urc-label">${u.label}</div>
+              <div class="urc-note">${u.note}</div>
+              <div class="urc-formula">${u.formula}</div>
+            </div>`;
+          }).join('');
+          resultsArea.innerHTML = `<div class="uni-results-grid">${cards}</div>`;
+        }
+
+        calcBtn.addEventListener('click', function () {
+          const error = validateForm();
+          if (error) {
+            resultsArea.innerHTML = `<div class="result-error">⚠️ ${error}</div>`;
+            return;
+          }
+          const subjects = readSubjects();
+          renderResults(subjects);
+          const el = document.getElementById('resultsArea');
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        initRows();
+      })();
+    </script>
+</body>
+</html>

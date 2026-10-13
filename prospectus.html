@@ -18,7 +18,6 @@
       })();
     </script>
     <style>
-      /* Page-specific styles for the Prospectus page */
       .prospectus-hero {
         text-align: center;
         padding: 2rem 0.5rem 1.5rem;
@@ -233,7 +232,6 @@
       .top-bar {
         margin-left: 2.8rem;
       }
-      /* Stats row */
       .prospectus-stats {
         display: flex;
         flex-wrap: wrap;
@@ -257,7 +255,6 @@
         text-transform: uppercase;
         letter-spacing: 0.06em;
       }
-      /* Toast for download feedback */
       .download-toast {
         position: fixed;
         left: 50%;
@@ -387,7 +384,6 @@
 
     <script>
       (function () {
-        // ---------- Theme toggle ----------
         const btn = document.getElementById('themeToggle');
         function applyIcon() {
           const light = document.documentElement.classList.contains('light');
@@ -404,7 +400,6 @@
           applyIcon();
         });
 
-        // ---------- Side menu ----------
         const menuBtn = document.getElementById('menuBtn');
         const menu = document.getElementById('sideMenu');
         const backdrop = document.getElementById('menuBackdrop');
@@ -430,10 +425,6 @@
         });
         backdrop.addEventListener('click', closeMenu);
 
-        // ---------- Data: universities + prospectus PDF links ----------
-        // ⚠️ IMPORTANT: Place your PDF files in a folder named "prospectus"
-        // next to this HTML file, and name them exactly as shown in "pdf".
-        // Example: prospectus/uct.pdf, prospectus/wits.pdf, etc.
         const universities = [
           { name: "University of Cape Town", province: "Western Cape", short: "UCT", pdf: "prospectus/UCT2027.pdf" },
           { name: "University of the Witwatersrand", province: "Gauteng", short: "Wits", pdf: "prospectus/WITS2027.pdf" },
@@ -449,21 +440,20 @@
           { name: "University of Fort Hare", province: "Eastern Cape", short: "UFH", pdf: "prospectus/UFH2027.pdf" },
           { name: "University of Limpopo", province: "Limpopo", short: "UL", pdf: "prospectus/UL2027.pdf" },
           { name: "University of Venda", province: "Limpopo", short: "Univen", pdf: "prospectus/UNIVEN2027.pdf" },
-          { name: "University of Zululand", province: "KwaZulu-Natal", short: "Unizulu", pdf: "prospectus/unizulu.pdf" },
+          { name: "University of Zululand", province: "KwaZulu-Natal", short: "Unizulu", pdf: "prospectus/UNIZULU2027.pdf" },
           { name: "Walter Sisulu University", province: "Eastern Cape", short: "WSU", pdf: "prospectus/WSU2027.pdf" },
           { name: "University of South Africa", province: "Distance", short: "UNISA", pdf: "prospectus/unisa.pdf" },
           { name: "Tshwane University of Technology", province: "Gauteng", short: "TUT", pdf: "prospectus/TUT2027.pdf" },
           { name: "Cape Peninsula University of Technology", province: "Western Cape", short: "CPUT", pdf: "prospectus/CPUT2027.pdf" },
           { name: "Durban University of Technology", province: "KwaZulu-Natal", short: "DUT", pdf: "prospectus/DUT2027.pdf" },
           { name: "Vaal University of Technology", province: "Gauteng", short: "VUT", pdf: "prospectus/VUT2027.pdf" },
-          { name: "Central University of Technology", province: "Free State", short: "CUT", pdf: "prospectus/cut.pdf" },
+          { name: "Central University of Technology", province: "Free State", short: "CUT", pdf: "prospectus/CUT2027.pdf" },
           { name: "Mangosuthu University of Technology", province: "KwaZulu-Natal", short: "MUT", pdf: "prospectus/MUT2027.pdf" },
           { name: "Sol Plaatje University", province: "Northern Cape", short: "SPU", pdf: "prospectus/SPU2027.pdf" },
-          { name: "University of Mpumalanga", province: "Mpumalanga", short: "UMP", pdf: "prospectus/ump.pdf" },
-          { name: "Sefako Makgatho Health Sciences University", province: "Gauteng", short: "SMU", pdf: "prospectus/SMU.pdf" }
+          { name: "University of Mpumalanga", province: "Mpumalanga", short: "UMP", pdf: "prospectus/UMP2027.pdf" },
+          { name: "Sefako Makgatho Health Sciences University", province: "Gauteng", short: "SMU", pdf: "prospectus/SMU2027.pdf" }
         ];
 
-        // Map university name -> logo file
         function uniLogoFile(name) {
           const map = {
             'University of Cape Town': 'uct',
@@ -540,7 +530,6 @@
           return '<span class="uni-logo" style="background:' + bg + '" title="' + name + '">' + letters + '</span>';
         }
 
-        // ---------- Toast ----------
         const toast = document.getElementById('downloadToast');
         let toastTimer = null;
         function showToast(msg) {
@@ -550,7 +539,6 @@
           toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
         }
 
-        // ---------- Render prospectus cards ----------
         const grid = document.getElementById('prospectusGrid');
         const searchInput = document.getElementById('prospectusSearch');
         const filterButtons = document.querySelectorAll('.filter-btn');
@@ -586,7 +574,6 @@
             </div>
           `).join('');
 
-          // Wire up the download buttons
           grid.querySelectorAll('.btn-download').forEach(btn => {
             btn.addEventListener('click', () => {
               const url = btn.getAttribute('data-pdf');
@@ -596,9 +583,6 @@
           });
         }
 
-        // ---------- Download helper ----------
-        // Fetches the PDF as a blob, then forces the browser to download it
-        // to the user's own storage (Downloads folder or chosen location).
         async function triggerDownload(url, name) {
           const safeName = name.replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '') || 'prospectus';
           const filename = safeName + '_prospectus.pdf';
@@ -609,8 +593,6 @@
             if (!response.ok) throw new Error('HTTP ' + response.status);
             const blob = await response.blob();
 
-            // Create a temporary object URL and click a hidden <a> to trigger
-            // the browser's native download dialog / Downloads folder.
             const blobUrl = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = blobUrl;
@@ -620,14 +602,10 @@
             a.click();
             document.body.removeChild(a);
 
-            // Free memory once the download has started
             setTimeout(() => URL.revokeObjectURL(blobUrl), 4000);
             showToast('Saved: ' + filename);
           } catch (err) {
             console.warn('Fetch download failed, falling back to direct download:', err);
-            // Fallback: try a direct download link. If the browser can open the
-            // PDF inline, the download attribute may be ignored, but the user
-            // still gets the file. If that also fails, open it in a new tab.
             try {
               const a = document.createElement('a');
               a.href = url;
@@ -646,7 +624,6 @@
           }
         }
 
-        // Filter buttons
         filterButtons.forEach(btn => {
           btn.addEventListener('click', () => {
             filterButtons.forEach(b => b.classList.remove('active'));
@@ -656,13 +633,11 @@
           });
         });
 
-        // Search
         searchInput.addEventListener('input', () => {
           currentSearch = searchInput.value.trim();
           renderCards();
         });
 
-        // Initial render
         renderCards();
       })();
     </script>

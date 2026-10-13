@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyUniGuideSA · Home</title>
-    <link rel="icon" type="image/png" href="/C:\My Own Websites\MyUniGuideSA\logos/favicon-96x96.png?v=20261009" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/C:\My Own Websites\MyUniGuideSA\logos/favicon.svg?v=20261009" />
-    <link rel="shortcut icon" href="/C:\My Own Websites\MyUniGuideSA\logos/favicon.ico?v=20261009" />
-     <link rel="apple-touch-icon" sizes="180x180" href="/C:\My Own Websites\MyUniGuideSA\logos/apple-touch-icon.png?v=20261009" />
+    <link rel="icon" type="image/png" href="logos/favicon-96x96.png?v=20261009" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="logos/favicon.svg?v=20261009" />
+    <link rel="shortcut icon" href="logos/favicon.ico?v=20261009" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logos/apple-touch-icon.png?v=20261009" />
     <meta name="apple-mobile-web-app-title" content="MyUniGuideSA" />
-     <link rel="manifest" href="/C:\My Own Websites\MyUniGuideSA\logos/site.webmanifest?v=20261009" />
+    <link rel="manifest" href="logos/site.webmanifest?v=20261009" />
     <link rel="stylesheet" href="style.css">
     <script>
       (function () {
@@ -17,50 +17,6 @@
         if (t === 'light') document.documentElement.classList.add('light');
       })();
     </script>
-    <style>
-      .home-hero { text-align: center; padding: 1.5rem 0.5rem 1.25rem; }
-      .home-hero h2 {
-        font-size: 1.55rem; color: var(--heading);
-        margin-bottom: 0.6rem; justify-content: center;
-      }
-      .home-hero p {
-        color: var(--text-muted); font-size: 1.02rem; line-height: 1.55;
-        max-width: 34rem; margin: 0 auto;
-      }
-      .home-cta {
-        display: flex; flex-wrap: wrap; gap: 0.6rem;
-        justify-content: center; margin: 1.35rem 0 1rem;
-      }
-      .home-cta a {
-        text-decoration: none; display: inline-flex; align-items: center;
-        justify-content: center; padding: 0.85rem 1.4rem;
-        border-radius: 40px; font-weight: 600; font-size: 0.95rem;
-      }
-      .home-cta .btn-primary { width: auto; margin: 0; }
-      .feature-grid { display: grid; gap: 0.75rem; margin-top: 0.25rem; }
-      @media (min-width: 640px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
-      .feature-card {
-        background: var(--surface); border: 1px solid var(--border);
-        border-radius: 16px; padding: 1rem 1.1rem; text-align: left;
-      }
-      .feature-card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 0.35rem; }
-      .feature-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.45; margin: 0; }
-      .how-list {
-        margin: 0.5rem 0 0; padding-left: 1.2rem;
-        color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;
-      }
-      .how-list li { margin-bottom: 0.35rem; }
-      .home-note {
-        margin-top: 0; padding: 0.9rem 1rem; border-radius: 14px;
-        background: var(--surface2); border: 1px solid var(--border);
-        color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; text-align: center;
-      }
-      .top-bar { margin-left: 2.8rem; }
-      @media (max-width: 700px) {
-        .top-bar { margin-left: 2.6rem; }
-        .home-hero h2 { font-size: 1.3rem; }
-      }
-    </style>
 </head>
 <body>
     <button type="button" class="menu-btn menu-btn-fixed" id="menuBtn" aria-label="Open menu" title="Menu">
@@ -74,6 +30,9 @@
         <div class="side-menu-header">Menu</div>
         <a class="side-menu-item active" href="index.html">Home</a>
         <a class="side-menu-item" href="details.html">Your details</a>
+        <a class="side-menu-item" href="courses.html">Your courses</a>
+        <a class="side-menu-item" href="aps.html">APS Calculator</a>
+        <a class="side-menu-item" href="prospectus.html">Prospectus</a>
         <a class="side-menu-item" href="contact.html">Contact</a>
     </nav>
 
@@ -87,49 +46,86 @@
         </div>
         <div class="subhead">Your guide to South African university courses.</div>
 
-        <div class="card single-card">
+        <div class="home-wrapper">
+
+            <!-- Hero -->
             <div class="home-hero">
-                <h2>Find courses you can qualify for</h2>
-                <p>
-                  MyUniGuideSA helps Grade 10–12 learners match their subject marks and APS
-                  to undergraduate programmes at all 26 public universities in South Africa.
+                <span class="home-badge"><span class="dot"></span> 26 public universities · 9 provinces</span>
+                <h2>Find the right <span class="accent">university course</span> for your marks</h2>
+                <p class="lead">
+                    MyUniGuideSA helps Grade 10–12 learners check their APS, match their subjects
+                    to real degree requirements, and open official prospectuses — all in one place.
                 </p>
             </div>
 
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>APS calculator</h3>
-                    <p>Live APS from your best 6 subjects (Life Orientation excluded), using the standard NSC points scale.</p>
+            <!-- Action cards -->
+            <div class="action-grid">
+                <a class="action-card primary" href="details.html">
+                    <div class="action-icon">🎓</div>
+                    <h3>Check Qualifying Courses</h3>
+                    <p>
+                        Enter your name, grade, subjects and marks. We calculate your APS,
+                        then show every undergraduate programme you qualify for across all 26
+                        public universities — with requirements, jobs and salary ranges.
+                    </p>
+                    <span class="cta">Start my check <span class="arrow">→</span></span>
+                </a>
+
+                <a class="action-card secondary" href="aps.html">
+                    <div class="action-icon">🧮</div>
+                    <h3>APS Calculator</h3>
+                    <p>
+                        See your score according to each of the 26 public universities'
+                        own APS formulas — not one generic number. Enter your subjects
+                        and marks to compare instantly.
+                    </p>
+                    <span class="cta">Calculate my APS <span class="arrow">→</span></span>
+                </a>
+
+                <a class="action-card tertiary" href="prospectus.html">
+                    <div class="action-icon">📖</div>
+                    <h3>Check Prospectus</h3>
+                    <p>
+                        Browse official university prospectuses. Open any prospectus in your
+                        browser to read it online, or download the PDF to your own storage
+                        for offline reference.
+                    </p>
+                    <span class="cta">Open prospectus list <span class="arrow">→</span></span>
+                </a>
+            </div>
+
+            <!-- Feature strip -->
+            <div class="feature-strip">
+                <div class="feature-item">
+                    <div class="f-icon">📊</div>
+                    <div>
+                        <h4>Live APS</h4>
+                        <p>Auto-calculated from your best 6 subjects.</p>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <h3>26 universities</h3>
-                    <p>Browse programmes from UCT, Wits, Stellenbosch, UP, UJ, UKZN, UFS, NWU, and every other public university.</p>
+                <div class="feature-item">
+                    <div class="f-icon">✅</div>
+                    <div>
+                        <h4>Qualified vs not yet</h4>
+                        <p>Clear green/red match per course.</p>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <h3>Qualified vs not yet</h3>
-                    <p>See which courses match your APS and subject minima — green for qualified, red when you still need higher marks.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Jobs & salaries</h3>
-                    <p>Each course includes typical career paths and estimated monthly salary ranges in South Africa.</p>
+                <div class="feature-item">
+                    <div class="f-icon">💼</div>
+                    <div>
+                        <h4>Jobs & salaries</h4>
+                        <p>Typical SA career paths per programme.</p>
+                    </div>
                 </div>
             </div>
 
-            <h2 style="margin-top:1.5rem; margin-bottom:0.5rem; font-size:1.15rem;">How it works</h2>
-            <ol class="how-list">
-                <li>Enter your name, grade, subjects and marks (minimum 7 subjects).</li>
-                <li>We calculate your APS and check each course’s published requirements.</li>
-                <li>Explore universities, filter “Qualified only”, and open a course for description, jobs and gaps.</li>
-            </ol>
-
-            <div class="home-cta">
-                <a class="btn-primary" href="details.html">Start — enter my details</a>
-            </div>
-
-            <p class="home-note">
+            <!-- Note -->
+            <div class="home-note">
+                <span class="info">ℹ</span>
                 Guidance only — APS and subject minima change by year and campus.
-                Always confirm on the official university prospectus before you apply.
-            </p>
+                Always confirm on the official university prospectus before applying.
+            </div>
+
         </div>
     </div>
 
