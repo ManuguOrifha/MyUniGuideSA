@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyUniGuideSA · Prospectus</title>
+    <link rel="icon" type="image/png" href="logos/favicon-96x96.png?v=20261009" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="logos/favicon.svg?v=20261009" />
+    <link rel="shortcut icon" href="logos/favicon.ico?v=20261009" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logos/apple-touch-icon.png?v=20261009" />
+    <meta name="apple-mobile-web-app-title" content="MyUniGuideSA" />
+    <link rel="manifest" href="logos/site.webmanifest?v=20261009" />
+    <link rel="stylesheet" href="style.css">
+    <script>
+      (function () {
+        const t = localStorage.getItem('uniPath_theme') || 'dark';
+        if (t === 'light') document.documentElement.classList.add('light');
+      })();
+    </script>
+    <style>
+      /* Page-specific styles for the Prospectus page */
+      .prospectus-hero {
+        text-align: center;
+        padding: 2rem 0.5rem 1.5rem;
+      }
+      .prospectus-hero h2 {
+        font-size: 1.75rem;
+        color: var(--heading);
+        margin-bottom: 0.75rem;
+        justify-content: center;
+        letter-spacing: -0.02em;
+      }
+      .prospectus-hero p {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        max-width: 42rem;
+        margin: 0 auto 0.5rem;
+      }
+      .prospectus-hero .hero-sub {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+        opacity: 0.85;
+      }
+      .prospectus-search-bar {
+        max-width: 520px;
+        margin: 1.5rem auto 0;
+        position: relative;
+      }
+      .prospectus-search-bar input {
+        width: 100%;
+        padding: 1rem 1.25rem 1rem 3rem;
+        border: 2px solid var(--border);
+        border-radius: 50px;
+        background: var(--input-bg);
+        color: var(--text);
+        font-size: 1rem;
+        font-family: inherit;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .prospectus-search-bar input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+      }
+      .prospectus-search-bar .search-icon {
+        position: absolute;
+        left: 1.1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        pointer-events: none;
+      }
+      .prospectus-filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.45rem;
+        margin: 1.5rem 0 1.25rem;
+        padding: 0.75rem 1rem;
+        background: var(--surface3);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+      }
+      .prospectus-filter-bar label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-right: 0.1rem;
+        margin-bottom: 0;
+        display: inline;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .prospectus-filter-bar .filter-btn {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 0.35rem 0.85rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .prospectus-filter-bar .filter-btn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .prospectus-filter-bar .filter-btn:hover:not(.active) {
+        border-color: var(--accent);
+      }
+      .prospectus-grid {
+        display: grid;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+      @media (min-width: 700px) {
+        .prospectus-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (min-width: 1100px) {
+        .prospectus-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .prospectus-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 1.35rem 1.25rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+      .prospectus-card:hover {
+        border-color: var(--accent);
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.12);
+        transform: translateY(-2px);
+      }
+      .prospectus-card .uni-logo-wrap {
+        margin-bottom: 0.85rem;
+      }
+      .prospectus-card h3 {
+        font-size: 1.05rem;
+        color: var(--heading);
+        margin-bottom: 0.3rem;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+      }
+      .prospectus-card .province-tag {
+        display: inline-block;
+        margin-bottom: 0.75rem;
+        align-self: flex-start;
+        font-size: 0.68rem;
+        font-weight: 600;
+        padding: 0.18rem 0.55rem;
+        border-radius: 20px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .prospectus-card p {
+        color: var(--text-muted);
+        font-size: 0.86rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        flex: 1;
+      }
+      .prospectus-card .card-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: auto;
+      }
+      .prospectus-card .btn-open,
+      .prospectus-card .btn-download {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.7rem 1.15rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.82rem;
+        text-decoration: none;
+        transition: 0.2s;
+        width: 100%;
+        cursor: pointer;
+        font-family: inherit;
+        border: 1px solid transparent;
+      }
+      .prospectus-card .btn-open {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      .prospectus-card .btn-open:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+        transform: scale(1.02);
+      }
+      .prospectus-card .btn-download {
+        background: var(--surface2);
+        color: var(--text);
+        border-color: var(--border);
+      }
+      .prospectus-card .btn-download:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: scale(1.02);
+      }
+      .prospectus-card .btn-open .ico,
+      .prospectus-card .btn-download .ico {
+        font-size: 0.95em;
+        margin-right: 0.1rem;
+      }
+      .no-prospectus {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+      .top-bar {
+        margin-left: 2.8rem;
+      }
+      /* Stats row */
+      .prospectus-stats {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 1.25rem;
+      }
+      .prospectus-stat {
+        text-align: center;
+      }
+      .prospectus-stat .stat-num {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1.2;
+      }
+      .prospectus-stat .stat-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      /* Toast for download feedback */
+      .download-toast {
+        position: fixed;
+        left: 50%;
+        bottom: 1.5rem;
+        transform: translateX(-50%) translateY(120%);
+        background: var(--surface3);
+        color: var(--heading);
+        border: 1px solid var(--border);
+        padding: 0.85rem 1.2rem;
+        border-radius: 14px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        z-index: 9999;
+        max-width: min(92vw, 360px);
+        text-align: center;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+        opacity: 0;
+        transition: 0.25s;
+        pointer-events: none;
+      }
+      .download-toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      @media (max-width: 700px) {
+        .top-bar {
+          margin-left: 2.6rem;
+        }
+        .prospectus-hero h2 {
+          font-size: 1.4rem;
+        }
+        .prospectus-hero p {
+          font-size: 0.95rem;
+        }
+        .prospectus-filter-bar {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.5rem;
+        }
+        .prospectus-card {
+          padding: 1.1rem;
+        }
+        .prospectus-stats {
+          gap: 1rem;
+        }
+        .prospectus-stat .stat-num {
+          font-size: 1.25rem;
+        }
+      }
+    </style>
+</head>
+<body>
+    <button type="button" class="menu-btn menu-btn-fixed" id="menuBtn" aria-label="Open menu" title="Menu">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+    </button>
+
+    <div class="side-menu-backdrop" id="menuBackdrop" hidden></div>
+    <nav class="side-menu" id="sideMenu" aria-label="Main menu" hidden>
+        <div class="side-menu-header">Menu</div>
+        <a class="side-menu-item" href="index.html">Home</a>
+        <a class="side-menu-item" href="details.html">Your details</a>
+        <a class="side-menu-item" href="courses.html">Your courses</a>
+        <a class="side-menu-item active" href="prospectus.html">Prospectus</a>
+        <a class="side-menu-item" href="contact.html">Contact</a>
+    </nav>
+
+    <div class="app-container">
+        <div class="top-bar">
+            <h1>MyUniGuideSA</h1>
+            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
+                <span class="theme-icon">☀️</span>
+                <span class="theme-label">Light mode</span>
+            </button>
+        </div>
+        <div class="subhead">Prospectus — official university admission information.</div>
+
+        <div class="card single-card" style="padding: 1.5rem 1.5rem 2rem;">
+            <div class="prospectus-hero">
+                <h2>University Prospectuses</h2>
+                <p>
+                    Each South African public university publishes its own prospectus with the
+                    official admission requirements, APS scales and programme offerings for the
+                    upcoming academic year.
+                </p>
+                <div class="prospectus-stats">
+                    <div class="prospectus-stat">
+                        <span class="stat-num">26</span>
+                        <span class="stat-label">Public universities</span>
+                    </div>
+                    <div class="prospectus-stat">
+                        <span class="stat-num">9</span>
+                        <span class="stat-label">Provinces covered</span>
+                    </div>
+                    <div class="prospectus-stat">
+                        <span class="stat-num">100%</span>
+                        <span class="stat-label">Official sources</span>
+                    </div>
+                </div>
+                <div class="prospectus-search-bar">
+                    <span class="search-icon">⌕</span>
+                    <input type="search" id="prospectusSearch" placeholder="Search for a university…" autocomplete="off">
+                </div>
+                <p class="hero-sub">Open the PDF to read it online, or download it to your own storage for offline use.</p>
+            </div>
+
+            <div class="prospectus-filter-bar" id="filterBar">
+                <label>Filter</label>
+                <button type="button" class="filter-btn active" data-filter="all">All</button>
+                <button type="button" class="filter-btn" data-filter="Western Cape">Western Cape</button>
+                <button type="button" class="filter-btn" data-filter="Gauteng">Gauteng</button>
+                <button type="button" class="filter-btn" data-filter="KwaZulu-Natal">KwaZulu-Natal</button>
+                <button type="button" class="filter-btn" data-filter="Eastern Cape">Eastern Cape</button>
+                <button type="button" class="filter-btn" data-filter="Free State">Free State</button>
+                <button type="button" class="filter-btn" data-filter="Limpopo">Limpopo</button>
+                <button type="button" class="filter-btn" data-filter="Mpumalanga">Mpumalanga</button>
+                <button type="button" class="filter-btn" data-filter="North West">North West</button>
+                <button type="button" class="filter-btn" data-filter="Northern Cape">Northern Cape</button>
+            </div>
+
+            <div class="prospectus-grid" id="prospectusGrid"></div>
+        </div>
+    </div>
+
+    <div class="download-toast" id="downloadToast">Downloading prospectus…</div>
+
+    <script>
+      (function () {
+        // ---------- Theme toggle ----------
+        const btn = document.getElementById('themeToggle');
+        function applyIcon() {
+          const light = document.documentElement.classList.contains('light');
+          const icon = btn.querySelector('.theme-icon');
+          const label = btn.querySelector('.theme-label');
+          if (icon) icon.textContent = light ? '🌙' : '☀️';
+          if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+        }
+        applyIcon();
+        btn.addEventListener('click', function () {
+          document.documentElement.classList.toggle('light');
+          const light = document.documentElement.classList.contains('light');
+          localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+          applyIcon();
+        });
+
+        // ---------- Side menu ----------
+        const menuBtn = document.getElementById('menuBtn');
+        const menu = document.getElementById('sideMenu');
+        const backdrop = document.getElementById('menuBackdrop');
+        function openMenu() {
+          menu.hidden = false;
+          backdrop.hidden = false;
+          requestAnimationFrame(function () {
+            menu.classList.add('open');
+            backdrop.classList.add('open');
+          });
+        }
+        function closeMenu() {
+          menu.classList.remove('open');
+          backdrop.classList.remove('open');
+          setTimeout(function () {
+            menu.hidden = true;
+            backdrop.hidden = true;
+          }, 200);
+        }
+        menuBtn.addEventListener('click', function () {
+          if (menu.classList.contains('open')) closeMenu();
+          else openMenu();
+        });
+        backdrop.addEventListener('click', closeMenu);
+
+        // ---------- Data: universities + prospectus PDF links ----------
+        // ⚠️ IMPORTANT: Place your PDF files in a folder named "prospectus"
+        // next to this HTML file, and name them exactly as shown in "pdf".
+        // Example: prospectus/uct.pdf, prospectus/wits.pdf, etc.
+        const universities = [
+          { name: "University of Cape Town", province: "Western Cape", short: "UCT", pdf: "prospectus/UCT2027.pdf" },
+          { name: "University of the Witwatersrand", province: "Gauteng", short: "Wits", pdf: "prospectus/WITS2027.pdf" },
+          { name: "Stellenbosch University", province: "Western Cape", short: "SU", pdf: "prospectus/SU2027.pdf" },
+          { name: "University of Pretoria", province: "Gauteng", short: "UP", pdf: "prospectus/UP2027.pdf" },
+          { name: "University of Johannesburg", province: "Gauteng", short: "UJ", pdf: "prospectus/UJ2027.pdf" },
+          { name: "North-West University", province: "North West", short: "NWU", pdf: "prospectus/NWU2027.pdf" },
+          { name: "University of KwaZulu-Natal", province: "KwaZulu-Natal", short: "UKZN", pdf: "prospectus/UKZN2027.pdf" },
+          { name: "Rhodes University", province: "Eastern Cape", short: "RU", pdf: "prospectus/RU2027.pdf" },
+          { name: "University of the Free State", province: "Free State", short: "UFS", pdf: "prospectus/UFS2027.pdf" },
+          { name: "University of the Western Cape", province: "Western Cape", short: "UWC", pdf: "prospectus/UWC2027.pdf" },
+          { name: "Nelson Mandela University", province: "Eastern Cape", short: "NMU", pdf: "prospectus/NMU2027.pdf" },
+          { name: "University of Fort Hare", province: "Eastern Cape", short: "UFH", pdf: "prospectus/UFH2027.pdf" },
+          { name: "University of Limpopo", province: "Limpopo", short: "UL", pdf: "prospectus/UL2027.pdf" },
+          { name: "University of Venda", province: "Limpopo", short: "Univen", pdf: "prospectus/UNIVEN2027.pdf" },
+          { name: "University of Zululand", province: "KwaZulu-Natal", short: "Unizulu", pdf: "prospectus/unizulu.pdf" },
+          { name: "Walter Sisulu University", province: "Eastern Cape", short: "WSU", pdf: "prospectus/WSU2027.pdf" },
+          { name: "University of South Africa", province: "Distance", short: "UNISA", pdf: "prospectus/unisa.pdf" },
+          { name: "Tshwane University of Technology", province: "Gauteng", short: "TUT", pdf: "prospectus/TUT2027.pdf" },
+          { name: "Cape Peninsula University of Technology", province: "Western Cape", short: "CPUT", pdf: "prospectus/CPUT2027.pdf" },
+          { name: "Durban University of Technology", province: "KwaZulu-Natal", short: "DUT", pdf: "prospectus/DUT2027.pdf" },
+          { name: "Vaal University of Technology", province: "Gauteng", short: "VUT", pdf: "prospectus/VUT2027.pdf" },
+          { name: "Central University of Technology", province: "Free State", short: "CUT", pdf: "prospectus/cut.pdf" },
+          { name: "Mangosuthu University of Technology", province: "KwaZulu-Natal", short: "MUT", pdf: "prospectus/MUT2027.pdf" },
+          { name: "Sol Plaatje University", province: "Northern Cape", short: "SPU", pdf: "prospectus/SPU2027.pdf" },
+          { name: "University of Mpumalanga", province: "Mpumalanga", short: "UMP", pdf: "prospectus/ump.pdf" },
+          { name: "Sefako Makgatho Health Sciences University", province: "Gauteng", short: "SMU", pdf: "prospectus/SMU.pdf" }
+        ];
+
+        // Map university name -> logo file
+        function uniLogoFile(name) {
+          const map = {
+            'University of Cape Town': 'uct',
+            'University of the Witwatersrand': 'wits',
+            'Stellenbosch University': 'stellenbosch',
+            'University of Pretoria': 'up',
+            'University of Johannesburg': 'uj',
+            'North-West University': 'nwu',
+            'University of KwaZulu-Natal': 'ukzn',
+            'Rhodes University': 'rhodes',
+            'University of the Free State': 'ufs',
+            'University of the Western Cape': 'uwc',
+            'Nelson Mandela University': 'nmu',
+            'University of Fort Hare': 'ufh',
+            'University of Limpopo': 'ul',
+            'University of Venda': 'univen',
+            'University of Zululand': 'unizulu',
+            'Walter Sisulu University': 'wsu',
+            'University of South Africa': 'unisa',
+            'Tshwane University of Technology': 'tut',
+            'Cape Peninsula University of Technology': 'cput',
+            'Durban University of Technology': 'dut',
+            'Vaal University of Technology': 'vut',
+            'Central University of Technology': 'cut',
+            'Mangosuthu University of Technology': 'mut',
+            'Sol Plaatje University': 'spu',
+            'University of Mpumalanga': 'ump',
+            'Sefako Makgatho Health Sciences University': 'smu'
+          };
+          return map[name] || null;
+        }
+
+        function uniLogoShort(name) {
+          if (name === 'University of South Africa') return 'UNISA';
+          if (name === 'University of the Witwatersrand') return 'Wits';
+          if (name === 'Stellenbosch University') return 'SU';
+          if (name === 'North-West University') return 'NWU';
+          if (name === 'University of KwaZulu-Natal') return 'UKZN';
+          if (name === 'Nelson Mandela University') return 'NMU';
+          if (name === 'University of Fort Hare') return 'UFH';
+          if (name === 'University of Limpopo') return 'UL';
+          if (name === 'University of Venda') return 'Univen';
+          if (name === 'University of Zululand') return 'Unizulu';
+          if (name === 'Walter Sisulu University') return 'WSU';
+          if (name === 'Tshwane University of Technology') return 'TUT';
+          if (name === 'Cape Peninsula University of Technology') return 'CPUT';
+          if (name === 'Durban University of Technology') return 'DUT';
+          if (name === 'Vaal University of Technology') return 'VUT';
+          if (name === 'Central University of Technology') return 'CUT';
+          if (name === 'Mangosuthu University of Technology') return 'MUT';
+          if (name === 'Sol Plaatje University') return 'SPU';
+          if (name === 'University of Mpumalanga') return 'UMP';
+          if (name === 'Sefako Makgatho Health Sciences University') return 'SMU';
+          const short = name.replace(/^University of (the )?/i, '').replace(/^University Of (the )?/i, '');
+          if (short.length <= 6) return short;
+          return short.split(/\s+/).map(w => w[0] || '').join('').slice(0, 4).toUpperCase();
+        }
+
+        function uniLogoHtml(name) {
+          const letters = uniLogoShort(name);
+          const colors = ['#1d4ed8','#0f766e','#b45309','#7c3aed','#be123c','#0369a1','#15803d','#c2410c'];
+          let h = 0;
+          for (let i = 0; i < (name || '').length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+          const bg = colors[h % colors.length];
+          const file = uniLogoFile(name);
+          if (file) {
+            return '<span class="uni-logo-wrap" title="' + name + '">' +
+              '<img class="uni-logo-img" src="logos/' + file + '.jpeg" alt="' + letters + '" ' +
+              'data-base="logos/' + file + '" ' +
+              'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline-flex\'" />' +
+              '<span class="uni-logo uni-logo-fallback" style="background:' + bg + ';display:none">' + letters + '</span>' +
+              '</span>';
+          }
+          return '<span class="uni-logo" style="background:' + bg + '" title="' + name + '">' + letters + '</span>';
+        }
+
+        // ---------- Toast ----------
+        const toast = document.getElementById('downloadToast');
+        let toastTimer = null;
+        function showToast(msg) {
+          toast.textContent = msg;
+          toast.classList.add('show');
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        // ---------- Render prospectus cards ----------
+        const grid = document.getElementById('prospectusGrid');
+        const searchInput = document.getElementById('prospectusSearch');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        function renderCards() {
+          let filtered = universities.filter(u => {
+            const matchesFilter = currentFilter === 'all' || u.province === currentFilter;
+            const matchesSearch = !currentSearch || u.name.toLowerCase().includes(currentSearch.toLowerCase()) || u.short.toLowerCase().includes(currentSearch.toLowerCase());
+            return matchesFilter && matchesSearch;
+          });
+
+          if (!filtered.length) {
+            grid.innerHTML = '<div class="no-prospectus">No universities match your search.</div>';
+            return;
+          }
+
+          grid.innerHTML = filtered.map(u => `
+            <div class="prospectus-card" data-province="${u.province}">
+              ${uniLogoHtml(u.name)}
+              <h3>${u.name}</h3>
+              <span class="province-tag">${u.province}</span>
+              <p>Read the official prospectus for admission requirements, APS scales, and programme offerings.</p>
+              <div class="card-actions">
+                <a class="btn-open" href="${u.pdf}" target="_blank" rel="noopener noreferrer">
+                  <span class="ico" aria-hidden="true">↗</span> Open prospectus
+                </a>
+                <button type="button" class="btn-download" data-pdf="${u.pdf}" data-name="${u.name}">
+                  <span class="ico" aria-hidden="true">⬇</span> Download PDF
+                </button>
+              </div>
+            </div>
+          `).join('');
+
+          // Wire up the download buttons
+          grid.querySelectorAll('.btn-download').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const url = btn.getAttribute('data-pdf');
+              const name = btn.getAttribute('data-name') || 'prospectus';
+              triggerDownload(url, name);
+            });
+          });
+        }
+
+        // ---------- Download helper ----------
+        // Fetches the PDF as a blob, then forces the browser to download it
+        // to the user's own storage (Downloads folder or chosen location).
+        async function triggerDownload(url, name) {
+          const safeName = name.replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '') || 'prospectus';
+          const filename = safeName + '_prospectus.pdf';
+          showToast('Downloading ' + name + ' prospectus…');
+
+          try {
+            const response = await fetch(url, { mode: 'cors' });
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            const blob = await response.blob();
+
+            // Create a temporary object URL and click a hidden <a> to trigger
+            // the browser's native download dialog / Downloads folder.
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // Free memory once the download has started
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 4000);
+            showToast('Saved: ' + filename);
+          } catch (err) {
+            console.warn('Fetch download failed, falling back to direct download:', err);
+            // Fallback: try a direct download link. If the browser can open the
+            // PDF inline, the download attribute may be ignored, but the user
+            // still gets the file. If that also fails, open it in a new tab.
+            try {
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = filename;
+              a.target = '_blank';
+              a.rel = 'noopener noreferrer';
+              a.style.display = 'none';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              showToast('Opening PDF — use your browser’s save option.');
+            } catch (e2) {
+              window.open(url, '_blank', 'noopener,noreferrer');
+              showToast('Opening PDF in a new tab.');
+            }
+          }
+        }
+
+        // Filter buttons
+        filterButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.getAttribute('data-filter');
+            renderCards();
+          });
+        });
+
+        // Search
+        searchInput.addEventListener('input', () => {
+          currentSearch = searchInput.value.trim();
+          renderCards();
+        });
+
+        // Initial render
+        renderCards();
+      })();
+    </script>
+</body>
+</html>
