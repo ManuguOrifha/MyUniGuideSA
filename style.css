@@ -31,49 +31,53 @@
 }
 
 html.light {
-    --bg1: #f0f4fa;
-    --bg2: #e6ecf5;
-    --bg3: #eef2f8;
-    --card: rgba(255, 255, 255, 0.92);
-    --border: #d2deec;
-    --text: #102a41;
-    --text-muted: #5e6f88;
-    --heading: #0b2a4e;
-    --accent: #1e4a7a;
-    --accent-hover: #12345c;
-    --surface: #f8fafd;
-    --surface2: #e9f0f8;
-    --surface3: #ffffff;
-    --input-bg: #ffffff;
-    --nav-bg: #ffffffcc;
-    --ok-bg: #f2fbf5;
+    --bg1: #ffffff;
+    --bg2: #eef4fc;
+    --bg3: #dbe8f7;
+    --card: #c9ddf5;
+    --border: #8fb3dc;
+    --text: #0d2742;
+    --text-muted: #2e5077;
+    --heading: #0a2a4a;
+    --accent: #1a6fd4;
+    --accent-hover: #155ab0;
+    --surface: #dbe8f7;
+    --surface2: #c9ddf5;
+    --surface3: #e3edf9;
+    --input-bg: #eef5fd;
+    --nav-bg: #c9ddf5dd;
+    --ok-bg: #c9ecd5;
     --ok-border: #2e9e5b;
-    --bad-bg: #fdf6f6;
+    --bad-bg: #f5cfcf;
     --bad-border: #d97373;
-    --badge-yes-bg: #d3f1dd;
-    --badge-yes-text: #0f7b3e;
-    --badge-no-bg: #fadcdc;
-    --badge-no-text: #a02020;
+    --badge-yes-bg: #bde8cd;
+    --badge-yes-text: #0f5c2e;
+    --badge-no-bg: #f5cccc;
+    --badge-no-text: #8a1a1a;
 }
 
 body {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: linear-gradient(145deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);
     min-height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
-    padding: 1.25rem 0.75rem 2rem;
+    padding: 1.25rem 1.25rem 2.5rem;
     color: var(--text);
     transition: background 0.2s, color 0.2s;
 }
 
+/* FULL-WIDTH container for every page */
 .app-container {
-    max-width: 900px;
     width: 100%;
+    max-width: 100%;
+    padding: 0 0.5rem;
 }
 
 .app-container.wide {
-    max-width: 1400px;
+    width: 100%;
+    max-width: 100%;
 }
 
 .top-bar {
@@ -82,6 +86,7 @@ body {
     justify-content: space-between;
     gap: 0.6rem;
     margin-bottom: 0.4rem;
+    width: 100%;
 }
 
 .top-bar h1 {
@@ -193,7 +198,6 @@ body {
     flex-shrink: 0;
     overflow: visible;
 }
-
 
 .theme-toggle {
     background: var(--surface2);
@@ -317,6 +321,7 @@ h1 span {
     box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.35);
     padding: 1.5rem 1.5rem 1.75rem;
     border: 1px solid var(--border);
+    width: 100%;
 }
 
 .card h2 {
@@ -356,7 +361,7 @@ input, select {
 input:focus, select:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 4px rgba(26, 111, 212, 0.2);
 }
 
 input::placeholder {
@@ -403,8 +408,8 @@ input::placeholder {
 }
 
 html.light .subject-row button {
-    background: #ffe8e8;
-    color: #b33a3a;
+    background: #f5cccc;
+    color: #8a1a1a;
 }
 
 .subject-row button:hover {
@@ -530,7 +535,7 @@ html.light .subject-row button {
     color: var(--text-muted);
 }
 
-/* Results toolbar (sticky filters) */
+/* Results toolbar */
 .results-toolbar {
     position: relative;
     background: var(--surface3);
@@ -539,6 +544,7 @@ html.light .subject-row button {
     padding: 0.75rem 0.9rem;
     margin-bottom: 1rem;
     box-shadow: 0 4px 12px -8px rgba(0,0,0,0.25);
+    width: 100%;
 }
 
 .filter-row {
@@ -578,37 +584,6 @@ html.light .subject-row button {
     border-color: var(--accent);
 }
 
-.uni-nav-title {
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 0.45rem;
-    font-size: 0.85rem;
-}
-
-.uni-nav-btns {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-}
-
-.uni-nav-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 0.28rem 0.55rem;
-    border-radius: 16px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.15s;
-}
-
-.uni-nav-btn:hover {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-}
-
 .results-summary {
     margin-bottom: 0.85rem;
     padding: 0.75rem 1rem;
@@ -619,6 +594,7 @@ html.light .subject-row button {
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
 }
 
 .aps-pill {
@@ -650,6 +626,7 @@ html.light .subject-row button {
     border: 1px solid var(--border);
     overflow: hidden;
     transition: box-shadow 0.3s;
+    width: 100%;
 }
 
 .university-block.uni-highlight {
@@ -665,7 +642,7 @@ html.light .subject-row button {
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 0.6rem;
     flex-wrap: wrap;
 }
@@ -675,16 +652,6 @@ html.light .subject-row button {
     align-items: center;
     gap: 0.45rem;
     flex-wrap: wrap;
-}
-
-.uni-short {
-    background: var(--accent);
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 0.15rem 0.45rem;
-    border-radius: 8px;
-    letter-spacing: 0.3px;
 }
 
 .uni-title {
@@ -857,12 +824,12 @@ html.light .aps-ok {
 }
 
 html.light .course-qualified {
-    background: #dcfce7;
+    background: #c9ecd5;
     border-left: 5px solid #16a34a;
 }
 
 html.light .course-not-qualified {
-    background: #fee2e2;
+    background: #f5cfcf;
     border-left: 5px solid #dc2626;
 }
 
@@ -930,10 +897,7 @@ html.light .course-not-qualified {
     flex-shrink: 0;
 }
 
-
-/* ========== MOBILE / PHONE ========== */
-
-/* ========== PHONES ONLY ========== */
+/* ============ MOBILE ============ */
 @media (max-width: 700px) {
     body {
         padding: 0.55rem 0.55rem 4.5rem;
@@ -949,14 +913,12 @@ html.light .course-not-qualified {
         height: 40px;
     }
 
-    /* Room for fixed menu on the left */
     .app-container,
     .app-container.wide {
         max-width: 100%;
         width: 100%;
         padding-left: 0;
         padding-right: 0;
-        box-sizing: border-box;
     }
 
     .top-bar {
@@ -964,7 +926,7 @@ html.light .course-not-qualified {
         align-items: center;
         justify-content: space-between;
         gap: 0.5rem;
-        margin: 0 0 0.35rem 2.6rem; /* leave space for fixed menu */
+        margin: 0 0 0.35rem 2.6rem;
         width: auto;
         max-width: 100%;
     }
@@ -1007,13 +969,11 @@ html.light .course-not-qualified {
         border-left-width: 3px;
         line-height: 1.4;
         width: 100%;
-        box-sizing: border-box;
     }
 
     .page-nav {
         width: 100%;
         max-width: 100%;
-        box-sizing: border-box;
         justify-content: center;
         padding: 0.4rem 0.5rem;
         margin-bottom: 0.75rem;
@@ -1027,7 +987,6 @@ html.light .course-not-qualified {
     .card {
         width: 100%;
         max-width: 100%;
-        box-sizing: border-box;
         padding: 1rem 0.75rem 1.15rem;
         border-radius: 16px;
         margin: 0;
@@ -1041,10 +1000,8 @@ html.light .course-not-qualified {
     input, select {
         font-size: 16px;
         width: 100%;
-        box-sizing: border-box;
     }
 
-    /* Subject rows: select left, mark + lock on RIGHT (same row) */
     .subject-row {
         display: flex;
         flex-wrap: nowrap;
@@ -1053,7 +1010,6 @@ html.light .course-not-qualified {
         padding: 0.45rem 0.45rem;
         margin-bottom: 0.5rem;
         width: 100%;
-        box-sizing: border-box;
     }
 
     .subject-row select {
@@ -1083,7 +1039,7 @@ html.light .course-not-qualified {
     }
 
     .subject-row.locked::before {
-        display: none; /* avoid double L clutter on phones */
+        display: none;
     }
 
     .subjects-header {
@@ -1092,24 +1048,14 @@ html.light .course-not-qualified {
         gap: 0.4rem;
     }
 
-    .aps-live {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .btn-primary {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    /* Results full width */
+    .aps-live,
+    .btn-primary,
     .results-summary,
     .results-toolbar,
     .university-block,
     .disclaimer {
         width: 100%;
         max-width: 100%;
-        box-sizing: border-box;
     }
 
     .results-toolbar {
@@ -1118,27 +1064,11 @@ html.light .course-not-qualified {
 
     .uni-search-input {
         width: 100%;
-        box-sizing: border-box;
         font-size: 16px;
-    }
-
-    .uni-nav-btns {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.35rem;
-    }
-
-    .uni-nav-btn {
-        width: 100%;
-        text-align: center;
-        white-space: normal;
-        font-size: 0.68rem;
-        padding: 0.4rem 0.35rem;
     }
 
     .course-item {
         width: 100%;
-        box-sizing: border-box;
         padding: 0.55rem 0.6rem;
     }
 
@@ -1147,7 +1077,6 @@ html.light .course-not-qualified {
         font-size: 0.86rem;
     }
 
-    /* Scroll-to-top: bottom center only, not top-right clutter */
     .scroll-top-btn {
         left: 50%;
         right: auto;
@@ -1169,7 +1098,6 @@ html.light .course-not-qualified {
     .btn-secondary {
         width: 100%;
         max-width: 100%;
-        box-sizing: border-box;
     }
 }
 
@@ -1183,27 +1111,6 @@ html.light .course-not-qualified {
         width: 52px;
         min-width: 52px;
         max-width: 52px;
-    }
-}
-
-@media (max-width: 700px) {
-    html.light body {
-        background: #ffffff !important;
-        color: #102a41;
-    }
-    html.light {
-        --bg1: #ffffff;
-        --bg2: #ffffff;
-        --bg3: #f7f9fc;
-        --card: #ffffff;
-        --surface: #f8fafc;
-        --surface2: #f1f5f9;
-        --surface3: #ffffff;
-        --input-bg: #ffffff;
-        --border: #e2e8f0;
-        --text: #0f172a;
-        --text-muted: #64748b;
-        --heading: #0f172a;
     }
 }
 
@@ -1246,7 +1153,7 @@ html.light .course-not-qualified {
 }
 .uni-search-input:focus {
     outline: none; border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 4px rgba(26, 111, 212, 0.2);
 }
 .uni-search-list {
     position: absolute; left: 0; right: 0; top: calc(100% + 4px);
@@ -1270,7 +1177,6 @@ html.light .course-not-qualified {
 .course-desc[hidden] { display: none !important; }
 .course-desc.show:not([hidden]) { display: block !important; }
 
-/* Prevent SVG icons from exploding layout */
 .uni-title .icon-svg,
 .faculty-header .icon-svg,
 .uni-search-label .icon-svg,
@@ -1287,42 +1193,6 @@ html.light .course-not-qualified {
     max-height: 1.25rem;
 }
 
-.faculty-header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    text-align: left;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--border);
-    color: var(--accent);
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 0.95rem;
-    padding: 0.75rem 1rem;
-}
-.faculty-header:hover { background: var(--surface2); }
-.faculty-header-left { display: flex; align-items: center; gap: 0.4rem; min-width: 0; }
-.faculty-chevron { color: var(--text-muted); font-size: 0.75rem; flex-shrink: 0; }
-.faculty-body { display: block; }
-.faculty-block:not(.open) .faculty-body { display: none; }
-.faculty-block.open .faculty-body { display: block; }
-.course-desc[hidden] { display: none !important; }
-
-/* === layout fixes === */
-
-.ico {
-    display: inline-block;
-    font-size: 0.85em;
-    line-height: 1;
-    margin-right: 0.35rem;
-    opacity: 0.85;
-    color: var(--accent);
-    vertical-align: middle;
-}
 .faculty-header {
     width: 100%;
     display: flex !important;
@@ -1379,7 +1249,6 @@ html.light .course-not-qualified {
 .course-duration .ico {
     margin-right: 0.25rem;
 }
-/* Menu always far top-left */
 .menu-btn-fixed {
     position: fixed !important;
     top: 0.65rem !important;
@@ -1387,7 +1256,6 @@ html.light .course-not-qualified {
     right: auto !important;
     z-index: 300 !important;
 }
-/* University logo badge */
 .uni-logo {
     display: inline-flex;
     align-items: center;
@@ -1410,7 +1278,6 @@ html.light .course-not-qualified {
     flex-wrap: nowrap;
 }
 
-/* Scroll to top — bottom middle */
 .scroll-top-btn {
     position: fixed;
     left: 50%;
@@ -1443,12 +1310,10 @@ html.light .course-not-qualified {
 .faculty-body { display: block; }
 .faculty-block.open .faculty-body { display: block; }
 
-/* Phone: full-width filter, no empty right gap */
 @media (max-width: 700px) {
     .results-toolbar {
         width: 100%;
         max-width: 100%;
-        box-sizing: border-box;
         padding: 0.65rem 0.7rem;
     }
     .filter-row {
@@ -1462,21 +1327,11 @@ html.light .course-not-qualified {
         text-align: center;
         min-width: calc(50% - 0.5rem);
     }
-    .university-block {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        margin-left: 0;
-        margin-right: 0;
-    }
-    .course-wrap {
-        width: 100%;
-        box-sizing: border-box;
-    }
+    .university-block,
+    .course-wrap,
     .course-item {
         width: 100%;
         max-width: 100%;
-        box-sizing: border-box;
     }
     .uni-logo {
         min-width: 1.9rem;
@@ -1485,7 +1340,6 @@ html.light .course-not-qualified {
     }
 }
 
-/* Course row: badge on the right (phones + desktop) */
 .course-item {
     display: flex !important;
     flex-direction: row !important;
@@ -1493,7 +1347,6 @@ html.light .course-not-qualified {
     justify-content: space-between;
     gap: 0.5rem;
     width: 100%;
-    box-sizing: border-box;
 }
 .course-info {
     display: flex !important;
@@ -1529,8 +1382,6 @@ html.light .course-not-qualified {
         row-gap: 0.25rem;
         padding: 0.55rem 0.65rem;
         width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
     }
     .course-info {
         display: contents !important;
@@ -1559,20 +1410,6 @@ html.light .course-not-qualified {
         justify-self: end;
         align-self: center;
     }
-    .university-header {
-        width: 100%;
-        box-sizing: border-box;
-    }
-    .university-block {
-        display: block !important;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-    .uni-logo {
-        flex-shrink: 0;
-    }
 }
 
 .course-right {
@@ -1592,8 +1429,6 @@ html.light .course-not-qualified {
         justify-content: space-between;
         gap: 0.4rem;
         width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
     }
     .course-info {
         display: flex !important;
@@ -1614,7 +1449,7 @@ html.light .course-not-qualified {
         margin-left: 0.35rem;
     }
 }
-/* Real university emblems from /logos/ */
+
 .uni-logo-wrap {
     display: inline-flex;
     align-items: center;
@@ -1646,7 +1481,6 @@ html.light .course-not-qualified {
     }
 }
 
-/* University-specific admission score on results */
 .uni-score-pill {
     background: var(--accent);
     color: #fff;
@@ -1663,19 +1497,18 @@ html.light .uni-score-pill {
     color: #fff;
 }
 
-/* ============ HOME PAGE ============ */
+/* ============ HOME PAGE — VERTICAL CARDS ============ */
 
 .home-wrapper {
-    max-width: 960px;
+    width: 100%;
     margin: 0 auto;
     padding: 0 0.25rem;
 }
 
-/* Hero */
 .home-hero {
     text-align: center;
     padding: 2.5rem 1rem 2rem;
-    position: relative;
+    width: 100%;
 }
 .home-badge {
     display: inline-flex;
@@ -1715,40 +1548,55 @@ html.light .uni-score-pill {
     color: var(--text-muted);
     font-size: 1.05rem;
     line-height: 1.65;
-    max-width: 40rem;
+    max-width: 45rem;
     margin: 0 auto;
 }
 
-/* Action cards */
+/* ---- VERTICAL CARDS GRID ---- */
 .action-grid {
     display: grid;
-    gap: 1rem;
+    gap: 1.25rem;
     margin: 2rem 0 1.5rem;
+    grid-template-columns: 1fr; /* vertical, full-width on every screen */
+    width: 100%;
 }
+
 @media (min-width: 720px) {
-    .action-grid { grid-template-columns: 1fr 1fr; }
+    /* Still vertical — just wider layout with more breathing room */
+    .action-grid { grid-template-columns: 1fr; }
 }
-@media (min-width: 1000px) {
-    .action-grid { grid-template-columns: repeat(3, 1fr); }
+
+@media (min-width: 1100px) {
+    /* Cards remain full-width and vertical; two-side padding for huge screens */
+    .action-grid {
+        grid-template-columns: 1fr;
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
+
 .action-card {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* VERTICAL stacking */
+    align-items: flex-start;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 24px;
-    padding: 1.75rem 1.5rem 1.5rem;
+    padding: 2rem 1.75rem 1.75rem;
     text-decoration: none;
     color: inherit;
     transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
     position: relative;
     overflow: hidden;
+    width: 100%;
 }
+
 .action-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 4px;
+    height: 5px;
     background: var(--accent);
     transform: scaleX(0);
     transform-origin: left;
@@ -1757,7 +1605,7 @@ html.light .uni-score-pill {
 .action-card:hover {
     border-color: var(--accent);
     transform: translateY(-4px);
-    box-shadow: 0 16px 34px -14px rgba(59,130,246,0.4);
+    box-shadow: 0 16px 34px -14px rgba(26, 111, 212, 0.45);
 }
 .action-card:hover::before {
     transform: scaleX(1);
@@ -1773,20 +1621,20 @@ html.light .uni-score-pill {
 }
 
 .action-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1.1rem;
+    font-size: 1.7rem;
+    margin-bottom: 1.15rem;
     flex-shrink: 0;
 }
 .action-card.primary .action-icon {
-    background: rgba(59,130,246,0.15);
-    border: 1px solid rgba(59,130,246,0.35);
-    color: #60a5fa;
+    background: rgba(26, 111, 212, 0.15);
+    border: 1px solid rgba(26, 111, 212, 0.35);
+    color: #1a6fd4;
 }
 .action-card.secondary .action-icon {
     background: rgba(16,185,129,0.15);
@@ -1800,17 +1648,17 @@ html.light .uni-score-pill {
 }
 
 .action-card h3 {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--heading);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
     letter-spacing: -0.01em;
 }
 .action-card p {
     color: var(--text-muted);
-    font-size: 0.9rem;
-    line-height: 1.55;
-    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.4rem;
     flex: 1;
 }
 .action-card .cta {
@@ -1818,9 +1666,10 @@ html.light .uni-score-pill {
     align-items: center;
     gap: 0.4rem;
     font-weight: 600;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     color: var(--accent);
     margin-top: auto;
+    padding-top: 0.5rem;
 }
 .action-card.secondary .cta { color: #34d399; }
 .action-card.tertiary .cta { color: #fbbf24; }
@@ -1835,25 +1684,28 @@ html.light .uni-score-pill {
 /* Feature strip */
 .feature-strip {
     display: grid;
-    gap: 0.75rem;
-    margin: 1.5rem 0;
+    gap: 0.85rem;
+    margin: 1.75rem 0;
+    grid-template-columns: 1fr;
+    width: 100%;
 }
 @media (min-width: 720px) {
     .feature-strip { grid-template-columns: repeat(3, 1fr); }
 }
+
 .feature-item {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 1rem 1.1rem;
+    padding: 1.15rem 1.2rem;
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: 0.85rem;
 }
 .feature-item .f-icon {
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 10px;
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -1861,30 +1713,29 @@ html.light .uni-score-pill {
     align-items: center;
     justify-content: center;
     color: var(--accent);
-    font-size: 0.9rem;
+    font-size: 1rem;
 }
 .feature-item h4 {
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     font-weight: 700;
     color: var(--heading);
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.2rem;
 }
 .feature-item p {
-    font-size: 0.8rem;
+    font-size: 0.83rem;
     color: var(--text-muted);
     line-height: 1.45;
     margin: 0;
 }
 
-/* Note */
 .home-note {
-    margin-top: 1.5rem;
-    padding: 1rem 1.1rem;
+    margin-top: 1.75rem;
+    padding: 1.1rem 1.2rem;
     border-radius: 16px;
     background: var(--surface2);
     border: 1px solid var(--border);
     color: var(--text-muted);
-    font-size: 0.84rem;
+    font-size: 0.86rem;
     line-height: 1.55;
     text-align: center;
     display: flex;
@@ -1892,17 +1743,20 @@ html.light .uni-score-pill {
     gap: 0.6rem;
     justify-content: center;
     flex-wrap: wrap;
+    width: 100%;
 }
 .home-note .info {
     color: var(--accent);
     font-size: 1rem;
 }
 
-/* Home top-bar offset for fixed menu */
 .top-bar { margin-left: 2.8rem; }
 
 @media (max-width: 700px) {
     .top-bar { margin-left: 2.6rem; }
     .home-hero { padding: 1.5rem 0.5rem 1rem; }
     .action-card { padding: 1.5rem 1.25rem 1.25rem; }
+    .action-icon { width: 52px; height: 52px; font-size: 1.45rem; }
+    .action-card h3 { font-size: 1.12rem; }
+    .action-card p { font-size: 0.9rem; }
 }
