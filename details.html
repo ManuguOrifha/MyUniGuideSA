@@ -31,9 +31,40 @@
         if (t === 'light') document.documentElement.classList.add('light');
       })();
     </script>
+
+    <script>
+  (function () {
+    const backBtn = document.getElementById('backBtn');
+    if (backBtn) {
+      backBtn.addEventListener('click', function () {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = 'index.html';
+        }
+      });
+    }
+
+    const btn = document.getElementById('themeToggle');
+    function applyIcon() {
+      const light = document.documentElement.classList.contains('light');
+      const icon = btn.querySelector('.theme-icon');
+      const label = btn.querySelector('.theme-label');
+      if (icon) icon.textContent = light ? '🌙' : '☀️';
+      if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+    }
+    applyIcon();
+    btn.addEventListener('click', function () {
+      document.documentElement.classList.toggle('light');
+      const light = document.documentElement.classList.contains('light');
+      localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+      applyIcon();
+    });
+  })();
+</script>
 </head>
 <body>
-    <button type="button" class="menu-btn menu-btn-fixed" id="menuBtn" aria-label="Open menu" title="Menu">
+    <button type="button" class="menu-btn menu-btn-fixed" id="backBtn" aria-label="Go back" title="Back">
         <span class="menu-bar"></span>
         <span class="menu-bar"></span>
         <span class="menu-bar"></span>
@@ -106,30 +137,16 @@
     <script src="details.js"></script>
     <script>
       (function () {
-        const menuBtn = document.getElementById('menuBtn');
-        const menu = document.getElementById('sideMenu');
-        const backdrop = document.getElementById('menuBackdrop');
-        function openMenu() {
-          menu.hidden = false;
-          backdrop.hidden = false;
-          requestAnimationFrame(function () {
-            menu.classList.add('open');
-            backdrop.classList.add('open');
+        const backBtn = document.getElementById('backBtn');
+        if (backBtn) {
+          backBtn.addEventListener('click', function () {
+            if (window.history.length > 1) {
+              window.history.back();
+            } else {
+              window.location.href = 'index.html';
+            }
           });
         }
-        function closeMenu() {
-          menu.classList.remove('open');
-          backdrop.classList.remove('open');
-          setTimeout(function () {
-            menu.hidden = true;
-            backdrop.hidden = true;
-          }, 200);
-        }
-        menuBtn.addEventListener('click', function () {
-          if (menu.classList.contains('open')) closeMenu();
-          else openMenu();
-        });
-        backdrop.addEventListener('click', closeMenu);
 
         const btn = document.getElementById('themeToggle');
         function applyIcon() {

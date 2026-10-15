@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyUniGuideSA · APS Results</title>
+    <link rel="icon" type="image/png" href="logos/favicon-96x96.png?v=20261009" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="logos/favicon.svg?v=20261009" />
+    <link rel="shortcut icon" href="logos/favicon.ico?v=20261009" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logos/apple-touch-icon.png?v=20261009" />
+    <meta name="apple-mobile-web-app-title" content="MyUniGuideSA" />
+    <link rel="manifest" href="logos/site.webmanifest?v=20261009" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="aps.css">
+    <script>
+      (function () {
+        const t = localStorage.getItem('uniPath_theme') || 'dark';
+        if (t === 'light') document.documentElement.classList.add('light');
+      })();
+    </script>
+</head>
+<body>
+    <button type="button" class="menu-btn menu-btn-fixed" id="backBtn" aria-label="Go back" title="Back">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+    </button>
+
+    <div class="side-menu-backdrop" id="menuBackdrop" hidden></div>
+    <nav class="side-menu" id="sideMenu" aria-label="Main menu" hidden>
+        <div class="side-menu-header">Menu</div>
+        <a class="side-menu-item" href="index.html">Home</a>
+        <a class="side-menu-item" href="details.html">Your details</a>
+        <a class="side-menu-item" href="courses.html">Your courses</a>
+        <a class="side-menu-item active" href="aps.html">APS Calculator</a>
+        <a class="side-menu-item" href="prospectus.html">Prospectus</a>
+        <a class="side-menu-item" href="contact.html">Contact</a>
+    </nav>
+
+    <div class="app-container">
+        <div class="top-bar">
+            <h1>MyUniGuideSA</h1>
+            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
+                <span class="theme-icon">☀️</span>
+                <span class="theme-label">Light mode</span>
+            </button>
+        </div>
+        <div class="subhead">Your APS results — one score per university, on their own scale.</div>
+
+        <div class="card single-card" style="padding: 1.25rem 1.5rem 1.75rem;">
+            <div class="aps-hero">
+                <h2>Your APS Results</h2>
+                <p>
+                    Each card shows your score computed on that university’s official
+                    admission formula. Scores are not comparable across universities.
+                </p>
+            </div>
+
+            <div id="resultsArea"></div>
+
+            <div style="text-align:center; margin-top:1.5rem;">
+                <a href="aps.html" class="btn-secondary" style="text-decoration:none;">← Edit my subjects</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="aps-results.js"></script>
+</body>
+</html>
