@@ -31,44 +31,14 @@
         if (t === 'light') document.documentElement.classList.add('light');
       })();
     </script>
-
-    <script>
-  (function () {
-    const backBtn = document.getElementById('backBtn');
-    if (backBtn) {
-      backBtn.addEventListener('click', function () {
-        if (window.history.length > 1) {
-          window.history.back();
-        } else {
-          window.location.href = 'index.html';
-        }
-      });
-    }
-
-    const btn = document.getElementById('themeToggle');
-    function applyIcon() {
-      const light = document.documentElement.classList.contains('light');
-      const icon = btn.querySelector('.theme-icon');
-      const label = btn.querySelector('.theme-label');
-      if (icon) icon.textContent = light ? '🌙' : '☀️';
-      if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
-    }
-    applyIcon();
-    btn.addEventListener('click', function () {
-      document.documentElement.classList.toggle('light');
-      const light = document.documentElement.classList.contains('light');
-      localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
-      applyIcon();
-    });
-  })();
-</script>
 </head>
 <body>
-    <button type="button" class="menu-btn menu-btn-fixed" id="backBtn" aria-label="Go back" title="Back">
-        <span class="menu-bar"></span>
-        <span class="menu-bar"></span>
-        <span class="menu-bar"></span>
-    </button>
+    <!-- Replaced menu btn with Back Button -->
+    <a href="javascript:history.back()" class="back-btn" aria-label="Go back" title="Back">
+        <svg viewBox="0 0 24 24">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+    </a>
 
     <div class="side-menu-backdrop" id="menuBackdrop" hidden></div>
     <nav class="side-menu" id="sideMenu" aria-label="Main menu" hidden>
@@ -137,16 +107,7 @@
     <script src="details.js"></script>
     <script>
       (function () {
-        const backBtn = document.getElementById('backBtn');
-        if (backBtn) {
-          backBtn.addEventListener('click', function () {
-            if (window.history.length > 1) {
-              window.history.back();
-            } else {
-              window.location.href = 'index.html';
-            }
-          });
-        }
+        // Removed old backBtn JS logic since it's now an anchor tag
 
         const btn = document.getElementById('themeToggle');
         function applyIcon() {

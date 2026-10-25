@@ -1,7 +1,6 @@
 /* ============================================================
    MyUniGuideSA — Stok-Vel Inspired Theme (Full Screen Layout)
    Base: style.css
-   Replaced: Your Details (forms/subjects) & Courses (results) structure
    ============================================================ */
 
 :root {
@@ -51,13 +50,10 @@ html.light {
     --surface-3: #E4E4E7;
     --border: #D4D4D8;
     --border-light: #E4E4E7;
-    
-    /* Fix: Text colors need to be dark in light mode */
     --text: #18181B;
     --heading: #000000;
     --text-muted: #52525B;
     --text-dim: #71717A;
-    
     --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     --accent-glow: rgba(212, 160, 23, 0.2);
 }
@@ -128,7 +124,7 @@ a:hover {
 .subhead {
     color: var(--text-muted);
     font-size: 1.1rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1rem;
     margin-left: 3rem;
     max-width: 800px;
 }
@@ -195,9 +191,8 @@ button, .btn-primary, .btn-secondary, .btn-add, .btn-calc {
     border: none;
     border-radius: var(--radius-pill);
     padding: 1rem 2rem;
-    width: 100%;
+    width: 100%; /* Now stretches full width */
     margin-top: 1rem;
-    max-width: 400px;
 }
 
 .btn-primary:hover, .btn-calc:hover {
@@ -268,7 +263,7 @@ button, .btn-primary, .btn-secondary, .btn-add, .btn-calc {
    ============================================================ */
 .field-group {
     margin-bottom: 1.5rem;
-    max-width: 800px;
+    width: 100%;
 }
 
 .field-group label {
@@ -302,8 +297,16 @@ input:focus, select:focus {
     box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
+/* Make select dropdowns smaller on mobile phones */
+@media (max-width: 600px) {
+    select {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+}
+
 /* ============================================================
-   REPLACED: YOUR DETAILS — subject rows & live APS box
+   YOUR DETAILS — subject rows & live APS box
    ============================================================ */
 
 .subject-row {
@@ -315,7 +318,7 @@ input:focus, select:focus {
     padding: 0.45rem 0.55rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
-    max-width: 800px;
+    width: 100%;
 }
 
 .subject-row select {
@@ -408,7 +411,7 @@ input:focus, select:focus {
     margin-bottom: 0.6rem;
     flex-wrap: wrap;
     gap: 0.4rem;
-    max-width: 800px;
+    width: 100%;
 }
 
 .subjects-header span {
@@ -438,7 +441,7 @@ input:focus, select:focus {
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    max-width: 800px;
+    width: 100%;
 }
 
 .aps-live-label {
@@ -447,15 +450,12 @@ input:focus, select:focus {
     font-size: 0.9rem;
 }
 
+/* Reverted to large text instead of a pill */
 .aps-live-value {
-    background: var(--accent);
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.15rem;
-    padding: 0.2rem 0.85rem;
-    border-radius: var(--radius-pill);
-    min-width: 2.5rem;
-    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
 }
 
 .aps-live-hint {
@@ -464,7 +464,7 @@ input:focus, select:focus {
 }
 
 /* ============================================================
-   REPLACED: COURSES — toolbar, university blocks, course items
+   COURSES — toolbar, university blocks, course items
    ============================================================ */
 
 .results-toolbar {
@@ -997,7 +997,7 @@ input:focus, select:focus {
 }
 
 /* ============================================================
-   Navigation & Menus (from base style.css)
+   Navigation & Menus
    ============================================================ */
 .menu-btn {
     background: var(--surface-2);
@@ -1031,6 +1031,42 @@ input:focus, select:focus {
     height: 2px;
     background: var(--text);
     border-radius: 2px;
+}
+
+/* Fixed Back Button for inner pages */
+.back-btn {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 900;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.back-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateX(-2px);
+}
+
+.back-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
 }
 
 .side-menu-backdrop {
@@ -1267,6 +1303,7 @@ input:focus, select:focus {
     display: flex;
     flex-direction: column;
     transition: all 0.2s;
+    overflow: hidden;
 }
 
 .uni-result-card:hover {
@@ -1279,6 +1316,20 @@ input:focus, select:focus {
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.25rem;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Ensure logos inside APS results don't explode */
+.urc-head img,
+.urc-head svg,
+.urc-head .uni-logo-wrap {
+    max-height: 48px;
+    max-width: 48px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .urc-name {
@@ -1319,11 +1370,25 @@ input:focus, select:focus {
     border-radius: 8px;
     border: 1px solid var(--border);
     font-family: monospace;
+    word-wrap: break-word;
+}
+
+/* Mobile fallback for APS Results grid */
+@media (max-width: 600px) {
+    .uni-results-grid {
+        grid-template-columns: 1fr;
+    }
+    .uni-result-card {
+        padding: 1.25rem;
+    }
+    .urc-score {
+        font-size: 2.5rem;
+    }
 }
 
 /* Subject Input Card for APS page */
 .subject-input-card {
-    max-width: 900px;
+    width: 100%;
 }
 
 .subject-input-card h3 {
@@ -1636,12 +1701,12 @@ input:focus, select:focus {
 .home-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 1.5rem;
 }
 
 .home-hero {
     text-align: left;
-    padding: 4rem 0 2rem;
+    padding: 1rem 0 2rem;
     max-width: 900px;
 }
 
@@ -1685,10 +1750,6 @@ input:focus, select:focus {
     line-height: 1.6;
 }
 
-/* ============================================================
-   UPDATED: action-grid — "Check Qualification Course" card
-   spans full width on top; the other two sit side-by-side below
-   ============================================================ */
 .action-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -1701,7 +1762,6 @@ input:focus, select:focus {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    /* First card (Check Qualification Course) spans full width on top */
     .action-grid > .action-card:first-child {
         grid-column: 1 / -1;
     }
@@ -1770,7 +1830,6 @@ input:focus, select:focus {
     transform: translateX(6px);
 }
 
-/* NEW: Compact action cards on mobile phones */
 @media (max-width: 600px) {
     .action-grid {
         gap: 1rem;
@@ -1864,7 +1923,7 @@ input:focus, select:focus {
 }
 
 /* ============================================================
-   Responsive overrides for replaced sections (from consolidated)
+   Responsive overrides for replaced sections
    ============================================================ */
 @media (max-width: 700px) {
     .subject-row {
