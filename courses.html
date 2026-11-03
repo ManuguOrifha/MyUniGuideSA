@@ -25,12 +25,10 @@
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
     </script>
-    <script>
-      (function () {
-        const t = localStorage.getItem('uniPath_theme') || 'dark';
-        if (t === 'light') document.documentElement.classList.add('light');
-      })();
-    </script>
+  <script>
+  // Force Light Mode
+  document.documentElement.classList.add('light');
+</script>
 </head>
 <body>
     <!-- Replaced menu btn with Back Button -->
@@ -50,12 +48,10 @@
 
     <div class="app-container wide">
         <div class="top-bar">
-            <h1>MyUniGuideSA</h1>
-            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
-                <span class="theme-icon">☀️</span>
-                <span class="theme-label">Light mode</span>
-            </button>
-        </div>
+             <a href="index.html">
+        <img src="logos/logo.png" alt="MyUniGuideSA Logo" class="site-logo">
+    </a>
+            
         <div class="subhead">Step 2 of 2 — All courses from all 26 public universities, sorted for you.</div>
 
         <div class="page-nav">

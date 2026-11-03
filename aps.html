@@ -13,11 +13,9 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="aps.css">
     <script>
-      (function () {
-        const t = localStorage.getItem('uniPath_theme') || 'dark';
-        if (t === 'light') document.documentElement.classList.add('light');
-      })();
-    </script>
+  // Force Light Mode
+  document.documentElement.classList.add('light');
+</script>
 </head>
 <body>
     <!-- Replaced menu btn with Back Button -->
@@ -39,14 +37,12 @@
     </nav>
 
     <div class="app-container">
-        <div class="top-bar">
-            <h1>MyUniGuideSA</h1>
-            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
-                <span class="theme-icon">☀️</span>
-                <span class="theme-label">Light mode</span>
-            </button>
-        </div>
-        <div class="subhead">APS Calculator — see your score for every university’s own method.</div>
+       <div class="top-bar">
+    <a href="index.html" class="logo-group">
+        <img src="logo.png" alt="MyUniGuideSA Logo" class="site-logo">
+        <span class="logo-subhead">Your guide to South African university courses.</span>
+    </a>
+</div>
 
         <div class="card single-card" style="padding: 1.25rem 1.5rem 1.75rem;">
             <div class="aps-hero">

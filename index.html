@@ -11,12 +11,10 @@
     <meta name="apple-mobile-web-app-title" content="MyUniGuideSA" />
     <link rel="manifest" href="logos/site.webmanifest?v=20261009" />
     <link rel="stylesheet" href="style.css">
-    <script>
-      (function () {
-        const t = localStorage.getItem('uniPath_theme') || 'dark';
-        if (t === 'light') document.documentElement.classList.add('light');
-      })();
-    </script>
+  <script>
+  // Force Light Mode
+  document.documentElement.classList.add('light');
+</script>
 </head>
 <body>
     <button type="button" class="menu-btn menu-btn-fixed" id="menuBtn" aria-label="Open menu" title="Menu">
@@ -35,63 +33,51 @@
         <a class="side-menu-item" href="contact.html">Contact</a>
     </nav>
 
-    <div class="app-container">
+    <!-- FULL WIDTH BLUE TOP BAR -->
+    <div class="top-banner">
         <div class="top-bar">
-            <h1>MyUniGuideSA</h1>
-            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
-                <span class="theme-icon">☀️</span>
-                <span class="theme-label">Light mode</span>
-            </button>
+            <a href="index.html" class="logo-group">
+                <img src="logos/logo.png" alt="MyUniGuideSA Logo" class="site-logo">
+                <span class="logo-subhead">Your guide to South African university courses.</span>
+            </a>
         </div>
-        <div class="subhead">Your guide to South African university courses.</div>
+    </div>
+
+    <div class="app-container">
+        
+        <!-- HERO TEXT -->
+        <div class="home-hero">
+            <span class="home-badge"><span class="dot"></span> STUDENT DIGITAL HUB</span>
+            <h2>Your digital starting point</h2>
+            <p class="lead">
+                Use MyUniGuideSA to find the courses you qualify for, calculate your APS
+                on each university's own scale, and browse official prospectuses — all in one place.
+            </p>
+        </div>
 
         <div class="home-wrapper">
-
-            <!-- Hero -->
-            <div class="home-hero">
-                <span class="home-badge"><span class="dot"></span> 26 public universities · 9 provinces</span>
-                <h2>Find the right <span class="accent">university course</span> for your marks</h2>
-                <p class="lead">
-                    MyUniGuideSA helps Grade 10–12 learners check their APS, match their subjects
-                    to real degree requirements, and open official prospectuses — all in one place.
-                </p>
-            </div>
-
-            <!-- Action cards -->
+            <!-- MAIN ACTION GRID: Check Qualifying Courses is the hero -->
             <div class="action-grid">
                 <a class="action-card primary" href="details.html">
-                    <div class="action-icon">🎓</div>
-                    <h3>Check Qualifying Courses</h3>
-                    <p>
-                        Enter your name, grade, subjects and marks. We calculate your APS,
-                        then show every undergraduate programme you qualify for across all 26
-                        public universities — with requirements, jobs and salary ranges.
-                    </p>
+                    <span class="card-tag">START HERE</span>
+                    <h3>Check <span>Qualifying Courses</span></h3>
+                    <p>Enter your subjects and marks once. We match you against every undergraduate programme across all 26 public universities.</p>
                     <span class="cta">Start my check <span class="arrow">→</span></span>
                 </a>
 
                 <a class="action-card secondary" href="aps.html">
                     <h3>APS Calculator</h3>
-                    <p>
-                        See your score according to each of the 26 public universities'
-                        own APS formulas — not one generic number. Enter your subjects
-                        and marks to compare instantly.
-                    </p>
+                    <p>See your score according to each of the 26 public universities' own APS formulas — not one generic number.</p>
                     <span class="cta">Calculate my APS <span class="arrow">→</span></span>
                 </a>
 
-                <a class="action-card tertiary" href="prospectus.html">
+                <a class="action-card secondary" href="prospectus.html">
                     <h3>Check Prospectus</h3>
-                    <p>
-                        Browse official university prospectuses. Open any prospectus in your
-                        browser to read it online, or download the PDF to your own storage
-                        for offline reference.
-                    </p>
+                    <p>Browse official university prospectuses. Open any prospectus in your browser to read it online, or download the PDF for offline reference.</p>
                     <span class="cta">Open prospectus list <span class="arrow">→</span></span>
                 </a>
             </div>
 
-            <!-- Feature strip -->
             <div class="feature-strip">
                 <div class="feature-item">
                     <div class="f-icon">📊</div>
@@ -116,7 +102,6 @@
                 </div>
             </div>
 
-            <!-- Note -->
             <div class="home-note">
                 <span class="info">ℹ</span>
                 Guidance only — APS and subject minima change by year and campus.
@@ -128,9 +113,11 @@
 
     <script>
       (function () {
+        // ---- Side menu ----
         const menuBtn = document.getElementById('menuBtn');
         const menu = document.getElementById('sideMenu');
         const backdrop = document.getElementById('menuBackdrop');
+
         function openMenu() {
           menu.hidden = false;
           backdrop.hidden = false;
@@ -153,15 +140,18 @@
         });
         backdrop.addEventListener('click', closeMenu);
 
+        // ---- Theme toggle ----
         const btn = document.getElementById('themeToggle');
+        const iconEl = btn.querySelector('.theme-icon');
+        const labelEl = btn.querySelector('.theme-label');
+
         function applyIcon() {
           const light = document.documentElement.classList.contains('light');
-          const icon = btn.querySelector('.theme-icon');
-          const label = btn.querySelector('.theme-label');
-          if (icon) icon.textContent = light ? '🌙' : '☀️';
-          if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+          if (iconEl) iconEl.textContent = light ? '🌙' : '☀️';
+          if (labelEl) labelEl.textContent = light ? 'Dark mode' : 'Light mode';
         }
         applyIcon();
+
         btn.addEventListener('click', function () {
           document.documentElement.classList.toggle('light');
           const light = document.documentElement.classList.contains('light');

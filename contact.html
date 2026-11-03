@@ -12,11 +12,9 @@
 <link rel="manifest" href="/C:\My Own Websites\MyUniGuideSA\logos/site.webmanifest?v=20261009" />
     <link rel="stylesheet" href="style.css">
     <script>
-      (function () {
-        const t = localStorage.getItem('uniPath_theme') || 'dark';
-        if (t === 'light') document.documentElement.classList.add('light');
-      })();
-    </script>
+  // Force Light Mode
+  document.documentElement.classList.add('light');
+</script>
     <style>
       body { padding-left: 0.75rem; padding-right: 0.75rem; }
       .app-container { max-width: 520px; }
@@ -109,11 +107,10 @@
 
     <div class="app-container">
         <div class="top-bar">
-            <h1>MyUniGuideSA</h1>
-            <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
-                <span class="theme-icon">☀️</span>
-                <span class="theme-label">Light mode</span>
-            </button>
+            <a href="index.html">
+        <img src="logos/logo.png" alt="MyUniGuideSA Logo" class="site-logo">
+    </a>
+            
         </div>
         <div class="subhead">Contact — questions, feedback, or help.</div>
 
