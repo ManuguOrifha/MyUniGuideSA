@@ -11,10 +11,10 @@
     <meta name="apple-mobile-web-app-title" content="MyUniGuideSA" />
     <link rel="manifest" href="logos/site.webmanifest?v=20261009" />
     <link rel="stylesheet" href="style.css">
-  <script>
-  // Force Light Mode
-  document.documentElement.classList.add('light');
-</script>
+    <script>
+        // Force Light Mode
+        document.documentElement.classList.add('light');
+    </script>
 </head>
 <body>
     <button type="button" class="menu-btn menu-btn-fixed" id="menuBtn" aria-label="Open menu" title="Menu">
@@ -111,54 +111,6 @@
         </div>
     </div>
 
-    <script>
-      (function () {
-        // ---- Side menu ----
-        const menuBtn = document.getElementById('menuBtn');
-        const menu = document.getElementById('sideMenu');
-        const backdrop = document.getElementById('menuBackdrop');
-
-        function openMenu() {
-          menu.hidden = false;
-          backdrop.hidden = false;
-          requestAnimationFrame(function () {
-            menu.classList.add('open');
-            backdrop.classList.add('open');
-          });
-        }
-        function closeMenu() {
-          menu.classList.remove('open');
-          backdrop.classList.remove('open');
-          setTimeout(function () {
-            menu.hidden = true;
-            backdrop.hidden = true;
-          }, 200);
-        }
-        menuBtn.addEventListener('click', function () {
-          if (menu.classList.contains('open')) closeMenu();
-          else openMenu();
-        });
-        backdrop.addEventListener('click', closeMenu);
-
-        // ---- Theme toggle ----
-        const btn = document.getElementById('themeToggle');
-        const iconEl = btn.querySelector('.theme-icon');
-        const labelEl = btn.querySelector('.theme-label');
-
-        function applyIcon() {
-          const light = document.documentElement.classList.contains('light');
-          if (iconEl) iconEl.textContent = light ? '🌙' : '☀️';
-          if (labelEl) labelEl.textContent = light ? 'Dark mode' : 'Light mode';
-        }
-        applyIcon();
-
-        btn.addEventListener('click', function () {
-          document.documentElement.classList.toggle('light');
-          const light = document.documentElement.classList.contains('light');
-          localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
-          applyIcon();
-        });
-      })();
-    </script>
+    <script src="index.js"></script>
 </body>
 </html>

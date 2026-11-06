@@ -8853,3 +8853,42 @@ function escapeHtml(text) {
 // The script is at the end of <body>, so the DOM is ready.
 // We call render() directly — no waiting, no spinner.
 render();
+
+// ============================================================
+// PAGE UI — scroll-to-top + theme toggle (courses page)
+// ============================================================
+(function () {
+    'use strict';
+
+    // ---- Scroll to top ----
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    if (scrollBtn) {
+        window.addEventListener('scroll', function () {
+            scrollBtn.classList.toggle('show', window.scrollY > 400);
+        }, { passive: true });
+
+        scrollBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // ---- Theme toggle ----
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+
+    function applyIcon() {
+        const light = document.documentElement.classList.contains('light');
+        const icon = btn.querySelector('.theme-icon');
+        const label = btn.querySelector('.theme-label');
+        if (icon) icon.textContent = light ? '🌙' : '☀️';
+        if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+    }
+    applyIcon();
+
+    btn.addEventListener('click', function () {
+        document.documentElement.classList.toggle('light');
+        const light = document.documentElement.classList.contains('light');
+        localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+        applyIcon();
+    });
+})();

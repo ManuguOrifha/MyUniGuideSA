@@ -591,3 +591,28 @@ async function handleGo() {
 }
 
 window.addEventListener('DOMContentLoaded', init);
+
+// ============================================================
+// THEME TOGGLE (details page)
+// ============================================================
+(function () {
+    'use strict';
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+
+    function applyIcon() {
+        const light = document.documentElement.classList.contains('light');
+        const icon = btn.querySelector('.theme-icon');
+        const label = btn.querySelector('.theme-label');
+        if (icon) icon.textContent = light ? '🌙' : '☀️';
+        if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+    }
+    applyIcon();
+
+    btn.addEventListener('click', function () {
+        document.documentElement.classList.toggle('light');
+        const light = document.documentElement.classList.contains('light');
+        localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+        applyIcon();
+    });
+})();

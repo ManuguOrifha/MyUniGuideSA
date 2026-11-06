@@ -73,36 +73,6 @@
     <button type="button" id="scrollTopBtn" class="scroll-top-btn" title="Back to top" aria-label="Back to top">↑</button>
 
     <script src="courses.js"></script>
-    <script>
-      (function () {
-        const scrollBtn = document.getElementById('scrollTopBtn');
-        if (scrollBtn) {
-          window.addEventListener('scroll', function () {
-            scrollBtn.classList.toggle('show', window.scrollY > 400);
-          }, { passive: true });
-          scrollBtn.addEventListener('click', function () {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          });
-        }
-
-        // Removed backBtn JS logic as it was replaced with the HTML anchor tag back button
-
-        const btn = document.getElementById('themeToggle');
-        function applyIcon() {
-          const light = document.documentElement.classList.contains('light');
-          const icon = btn.querySelector('.theme-icon');
-          const label = btn.querySelector('.theme-label');
-          if (icon) icon.textContent = light ? '🌙' : '☀️';
-          if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
-        }
-        applyIcon();
-        btn.addEventListener('click', function () {
-          document.documentElement.classList.toggle('light');
-          const light = document.documentElement.classList.contains('light');
-          localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
-          applyIcon();
-        });
-      })();
-    </script>
+    
 </body>
 </html>

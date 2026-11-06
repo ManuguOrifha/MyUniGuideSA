@@ -49,7 +49,7 @@
     <div class="app-container">
        <div class="top-bar">
     <a href="index.html" class="logo-group">
-        <img src="logo.png" alt="MyUniGuideSA Logo" class="site-logo">
+        <img src="logos/logo.png" alt="MyUniGuideSA Logo" class="site-logo">
         <span class="logo-subhead">Your guide to South African university courses.</span>
     </a>
 </div>
@@ -101,26 +101,6 @@
     </div>
 
     <script src="details.js"></script>
-    <script>
-      (function () {
-        // Removed old backBtn JS logic since it's now an anchor tag
-
-        const btn = document.getElementById('themeToggle');
-        function applyIcon() {
-          const light = document.documentElement.classList.contains('light');
-          const icon = btn.querySelector('.theme-icon');
-          const label = btn.querySelector('.theme-label');
-          if (icon) icon.textContent = light ? '🌙' : '☀️';
-          if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
-        }
-        applyIcon();
-        btn.addEventListener('click', function () {
-          document.documentElement.classList.toggle('light');
-          const light = document.documentElement.classList.contains('light');
-          localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
-          applyIcon();
-        });
-      })();
-    </script>
+    
 </body>
 </html>
