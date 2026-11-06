@@ -12,9 +12,9 @@
     <link rel="manifest" href="logos/site.webmanifest?v=20261009" />
     <link rel="stylesheet" href="style.css">
     <script>
-  // Force Light Mode
-  document.documentElement.classList.add('light');
-</script>
+        // Force Light Mode
+        document.documentElement.classList.add('light');
+    </script>
     <style>
       .prospectus-hero {
         text-align: center;
@@ -116,14 +116,10 @@
         margin-top: 0.5rem;
       }
       @media (min-width: 700px) {
-        .prospectus-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
+        .prospectus-grid { grid-template-columns: repeat(2, 1fr); }
       }
       @media (min-width: 1100px) {
-        .prospectus-grid {
-          grid-template-columns: repeat(3, 1fr);
-        }
+        .prospectus-grid { grid-template-columns: repeat(3, 1fr); }
       }
       .prospectus-card {
         background: var(--surface);
@@ -141,9 +137,7 @@
         box-shadow: 0 8px 24px rgba(59, 130, 246, 0.12);
         transform: translateY(-2px);
       }
-      .prospectus-card .uni-logo-wrap {
-        margin-bottom: 0.85rem;
-      }
+      .prospectus-card .uni-logo-wrap { margin-bottom: 0.85rem; }
       .prospectus-card h3 {
         font-size: 1.05rem;
         color: var(--heading);
@@ -227,9 +221,7 @@
         color: var(--text-muted);
         font-size: 0.95rem;
       }
-      .top-bar {
-        margin-left: 2.8rem;
-      }
+      .top-bar { margin-left: 2.8rem; }
       .prospectus-stats {
         display: flex;
         flex-wrap: wrap;
@@ -237,9 +229,7 @@
         gap: 1.5rem;
         margin-top: 1.25rem;
       }
-      .prospectus-stat {
-        text-align: center;
-      }
+      .prospectus-stat { text-align: center; }
       .prospectus-stat .stat-num {
         display: block;
         font-size: 1.5rem;
@@ -278,34 +268,22 @@
         transform: translateX(-50%) translateY(0);
       }
       @media (max-width: 700px) {
-        .top-bar {
-          margin-left: 2.6rem;
-        }
-        .prospectus-hero h2 {
-          font-size: 1.4rem;
-        }
-        .prospectus-hero p {
-          font-size: 0.95rem;
-        }
+        .top-bar { margin-left: 2.6rem; }
+        .prospectus-hero h2 { font-size: 1.4rem; }
+        .prospectus-hero p { font-size: 0.95rem; }
         .prospectus-filter-bar {
           flex-direction: column;
           align-items: stretch;
           gap: 0.5rem;
         }
-        .prospectus-card {
-          padding: 1.1rem;
-        }
-        .prospectus-stats {
-          gap: 1rem;
-        }
-        .prospectus-stat .stat-num {
-          font-size: 1.25rem;
-        }
+        .prospectus-card { padding: 1.1rem; }
+        .prospectus-stats { gap: 1rem; }
+        .prospectus-stat .stat-num { font-size: 1.25rem; }
       }
     </style>
 </head>
 <body>
-    <!-- Replaced menu btn with Back Button -->
+    <!-- Back Button -->
     <a href="javascript:history.back()" class="back-btn" aria-label="Go back" title="Back">
         <svg viewBox="0 0 24 24">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -324,10 +302,9 @@
 
     <div class="app-container">
         <div class="top-bar">
-             <a href="index.html">
-        <img src="logos/logo.png" alt="MyUniGuideSA Logo" class="site-logo">
-    </a>
-            
+            <a href="index.html">
+                <img src="logos/logo.png" alt="MyUniGuideSA Logo" class="site-logo">
+            </a>
         </div>
         <div class="subhead">Prospectus — official university admission information.</div>
 
@@ -358,7 +335,7 @@
                     <input type="search" id="prospectusSearch" placeholder="Search for a university…" autocomplete="off">
                 </div>
                 <p class="hero-sub">Open the PDF to read it online, or download it to your own storage for offline use.</p>
-              </div>
+            </div>
 
             <div class="prospectus-grid" id="prospectusGrid"></div>
         </div>
@@ -366,7 +343,7 @@
 
     <div class="download-toast" id="downloadToast">Downloading prospectus…</div>
 
-       <script src="prospectus.js"></script>
+    <script src="prospectus.js"></script>
 </body>
 </html>
  

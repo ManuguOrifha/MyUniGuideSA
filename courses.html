@@ -4,34 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyUniGuideSA · Your Courses</title>
-    <link rel="icon" type="image/png" href="/C:\My Own Websites\MyUniGuideSA\logos/favicon-96x96.png?v=20261009" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/C:\My Own Websites\MyUniGuideSA\logos/favicon.svg?v=20261009" />
-<link rel="shortcut icon" href="/C:\My Own Websites\MyUniGuideSA\logos/favicon.ico?v=20261009" />
-<link rel="apple-touch-icon" sizes="180x180" href="/C:\My Own Websites\MyUniGuideSA\logos/apple-touch-icon.png?v=20261009" />
-<meta name="apple-mobile-web-app-title" content="MyUniGuideSA" />
-<link rel="manifest" href="/C:\My Own Websites\MyUniGuideSA\logos/site.webmanifest?v=20261009" />
+    <link rel="icon" type="image/png" href="logos/favicon-96x96.png?v=20261009" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="logos/favicon.svg?v=20261009" />
+    <link rel="shortcut icon" href="logos/favicon.ico?v=20261009" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logos/apple-touch-icon.png?v=20261009" />
+    <meta name="apple-mobile-web-app-title" content="MyUniGuideSA" />
+    <link rel="manifest" href="logos/site.webmanifest?v=20261009" />
     <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase compat SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyALx3cRijxMZYp-d7-1oYACBkb6HgY1iWc",
-        authDomain: "unipath-sa-5d249.firebaseapp.com",
-        projectId: "unipath-sa-5d249",
-        storageBucket: "unipath-sa-5d249.firebasestorage.app",
-        messagingSenderId: "384264770314",
-        appId: "1:384264770314:web:4259384b0f40aff735e0f3"
-      };
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
+        const firebaseConfig = {
+            apiKey: "AIzaSyALx3cRijxMZYp-d7-1oYACBkb6HgY1iWc",
+            authDomain: "unipath-sa-5d249.firebaseapp.com",
+            projectId: "unipath-sa-5d249",
+            storageBucket: "unipath-sa-5d249.firebasestorage.app",
+            messagingSenderId: "384264770314",
+            appId: "1:384264770314:web:4259384b0f40aff735e0f3"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
     </script>
-  <script>
-  // Force Light Mode
-  document.documentElement.classList.add('light');
-</script>
+
+    <script>
+        // Force Light Mode
+        document.documentElement.classList.add('light');
+    </script>
 </head>
 <body>
-    <!-- Replaced menu btn with Back Button -->
+    <!-- Back Button -->
     <a href="javascript:history.back()" class="back-btn" aria-label="Go back" title="Back">
         <svg viewBox="0 0 24 24">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -48,10 +51,12 @@
 
     <div class="app-container wide">
         <div class="top-bar">
-             <a href="index.html">
-        <img src="logos/logo.png" alt="MyUniGuideSA Logo" class="site-logo">
-    </a>
-            
+            <a href="index.html" class="logo-group">
+                <img src="logos/logo.png" alt="MyUniGuideSA Logo" class="site-logo">
+                <span class="logo-subhead">Your guide to South African university courses.</span>
+            </a>
+        </div>
+
         <div class="subhead">Step 2 of 2 — All courses from all 26 public universities, sorted for you.</div>
 
         <div class="page-nav">
@@ -73,6 +78,5 @@
     <button type="button" id="scrollTopBtn" class="scroll-top-btn" title="Back to top" aria-label="Back to top">↑</button>
 
     <script src="courses.js"></script>
-    
 </body>
 </html>
