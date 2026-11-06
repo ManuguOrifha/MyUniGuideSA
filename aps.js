@@ -1,381 +1,410 @@
 // ============================================================
 // APS CALCULATOR PAGE
+// Uses the same subject-row design as details.js.
 // Collects subjects & marks, validates, then saves to
 // sessionStorage and redirects to aps-results.html
 // ============================================================
 
-(function () {
+document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
-    // ---------- Back button ----------
-    const backBtn = document.getElementById('backBtn');
-    if (backBtn) {
-        backBtn.addEventListener('click', function () {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
-    }
-
-    // ---------- Theme ----------
+    // ---------- Theme Toggle ----------
     const btn = document.getElementById('themeToggle');
-    function applyIcon() {
-        const light = document.documentElement.classList.contains('light');
-        const icon = btn.querySelector('.theme-icon');
-        const label = btn.querySelector('.theme-label');
-        if (icon) icon.textContent = light ? '🌙' : '☀️';
-        if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
-    }
-    applyIcon();
-    btn.addEventListener('click', function () {
-        document.documentElement.classList.toggle('light');
-        const light = document.documentElement.classList.contains('light');
-        localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+    if (btn) {
+        function applyIcon() {
+            const light = document.documentElement.classList.contains('light');
+            const icon = btn.querySelector('.theme-icon');
+            const label = btn.querySelector('.theme-label');
+            if (icon) icon.textContent = light ? '🌙' : '☀️';
+            if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
+        }
         applyIcon();
-    });
-
-    // ---------- Menu ----------
-    const menuBtn = document.getElementById('menuBtn');
-    const menu = document.getElementById('sideMenu');
-    const backdrop = document.getElementById('menuBackdrop');
-    function openMenu() {
-        menu.hidden = false; backdrop.hidden = false;
-        requestAnimationFrame(function () {
-            menu.classList.add('open'); backdrop.classList.add('open');
+        btn.addEventListener('click', function () {
+            document.documentElement.classList.toggle('light');
+            const light = document.documentElement.classList.contains('light');
+            localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+            applyIcon();
         });
     }
-    function closeMenu() {
-        menu.classList.remove('open'); backdrop.classList.remove('open');
-        setTimeout(function () { menu.hidden = true; backdrop.hidden = true; }, 200);
-    }
-    if (menuBtn) {
-        menuBtn.addEventListener('click', function () {
-            if (menu.classList.contains('open')) closeMenu(); else openMenu();
-        });
-    }
-    if (backdrop) backdrop.addEventListener('click', closeMenu);
 
-    // ---------- Subject lists ----------
+    // ---------- Toast Notifications ----------
+    function showAppToast(message) {
+        let el = document.getElementById('appToast');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'appToast';
+            el.className = 'app-toast';
+            document.body.appendChild(el);
+        }
+        el.textContent = message;
+        el.classList.add('show');
+        clearTimeout(showAppToast._t);
+        showAppToast._t = setTimeout(() => el.classList.remove('show'), 2800);
+    }
+
+    // ---------- Subject Lists ----------
     const HOME_LANGUAGES = [
-        "Afrikaans Home Language",
-        "English Home Language",
-        "isiNdebele Home Language",
-        "isiXhosa Home Language",
-        "isiZulu Home Language",
-        "Sepedi Home Language",
-        "Sesotho Home Language",
-        "Setswana Home Language",
-        "siSwati Home Language",
-        "Tshivenda Home Language",
-        "Xitsonga Home Language"
+        "Afrikaans Home Language", "English Home Language", "isiNdebele Home Language",
+        "isiXhosa Home Language", "isiZulu Home Language", "Sepedi Home Language",
+        "Sesotho Home Language", "Setswana Home Language", "siSwati Home Language",
+        "Tshivenda Home Language", "Xitsonga Home Language"
     ];
 
     const FIRST_ADDITIONAL_LANGUAGES = [
-        "Afrikaans First Additional Language",
-        "English First Additional Language",
-        "isiNdebele First Additional Language",
-        "isiXhosa First Additional Language",
-        "isiZulu First Additional Language",
-        "Sepedi First Additional Language",
-        "Sesotho First Additional Language",
-        "Setswana First Additional Language",
-        "siSwati First Additional Language",
-        "Tshivenda First Additional Language",
+        "Afrikaans First Additional Language", "English First Additional Language",
+        "isiNdebele First Additional Language", "isiXhosa First Additional Language",
+        "isiZulu First Additional Language", "Sepedi First Additional Language",
+        "Sesotho First Additional Language", "Setswana First Additional Language",
+        "siSwati First Additional Language", "Tshivenda First Additional Language",
         "Xitsonga First Additional Language"
     ];
 
     const OTHER_SUBJECTS = [
-        "Accounting",
-        "Agricultural Management Practices",
-        "Agricultural Sciences",
-        "Agricultural Technology",
-        "Business Studies",
-        "Civil Technology",
-        "Computer Applications Technology",
-        "Consumer Studies",
-        "Dance",
-        "Design",
-        "Dramatic Arts",
-        "Economics",
-        "Electrical Technology",
-        "Engineering Graphics and Design",
-        "Geography",
-        "History",
-        "Hospitality Studies",
-        "Information Technology",
-        "Life Sciences",
-        "Marine Sciences",
-        "Mathematical Literacy",
-        "Mathematics",
-        "Mechanical Technology",
-        "Music",
-        "Physical Sciences",
-        "Religion Studies",
-        "Sport and Exercise Science",
-        "Technical Mathematics",
-        "Technical Science",
-        "Tourism",
-        "Visual Arts"
+        "Accounting", "Agricultural Management Practices", "Agricultural Sciences",
+        "Agricultural Technology", "Biblical Studies", "Business Studies",
+        "Civil Technology", "Commerce", "Computer Applications Technology",
+        "Consumer Studies", "Dance", "Design", "Dramatic Arts", "Economics",
+        "Electrical Technology", "Engineering Graphics and Design", "Geography",
+        "History", "Hospitality Studies", "Information Technology", "Life Sciences",
+        "Marine Sciences", "Mathematical Literacy", "Mathematics",
+        "Mechanical Technology", "Music", "Physical Sciences", "Religion Studies",
+        "Sport and Exercise Science", "Technical Mathematics", "Technical Science",
+        "Tourism", "Visual Arts"
     ];
 
-    const list = document.getElementById('subjectList');
-    const addBtn = document.getElementById('addSubjectBtn');
+    const MIN_SUBJECTS = 7;
+    const MAX_SUBJECTS = 12;
+
+    // ---------- DOM Elements ----------
+    const subjectsContainer = document.getElementById('subjectList');
+    const addSubjectBtn = document.getElementById('addSubjectBtn');
     const calcBtn = document.getElementById('calcBtn');
 
-    // Helper: build a <select> with the given subjects and a placeholder
-    function buildSelect(subjects, placeholderText) {
-        const sel = document.createElement('select');
-        const placeholder = document.createElement('option');
-        placeholder.value = '';
-        placeholder.textContent = placeholderText;
-        placeholder.selected = true;
-        sel.appendChild(placeholder);
-        subjects.forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s;
-            opt.textContent = s;
-            sel.appendChild(opt);
+    let homeLanguageSelect = null;
+    let falSelect = null;
+
+    // ---------- Initialize ----------
+    function init() {
+        if (!subjectsContainer) return;
+        
+        createHomeLanguageRow();
+        createFALRow();
+        createLifeOrientationRow();
+
+        for (let i = 0; i < 4; i++) addSubjectRow();
+
+        addSubjectBtn.addEventListener('click', () => {
+            addSubjectRow();
         });
-        return sel;
+
+        calcBtn.addEventListener('click', handleCalculate);
+
+        syncFALOptions();
     }
 
-    // Row: locked Life Orientation
-    function makeLifeOrientationRow() {
+    // ---------- Row Creation ----------
+    function createHomeLanguageRow() {
+        const row = document.createElement('div');
+        row.className = 'subject-row locked';
+        row.dataset.role = 'homeLanguage';
+
+        const select = document.createElement('select');
+        select.className = 'subject-select';
+        select.id = 'homeLanguageSelect';
+
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = '— Enter home language —';
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        select.appendChild(placeholder);
+
+        HOME_LANGUAGES.forEach(subj => {
+            const opt = document.createElement('option');
+            opt.value = subj;
+            opt.textContent = subj;
+            select.appendChild(opt);
+        });
+
+        select.addEventListener('change', () => {
+            syncFALOptions();
+        });
+
+        const markInput = document.createElement('input');
+        markInput.type = 'number';
+        markInput.className = 'subject-mark';
+        markInput.placeholder = '%';
+        markInput.min = 0;
+        markInput.max = 100;
+
+        const lockBadge = document.createElement('span');
+        lockBadge.className = 'lock-badge';
+        lockBadge.textContent = 'L';
+
+        row.appendChild(select);
+        row.appendChild(markInput);
+        row.appendChild(lockBadge);
+        subjectsContainer.appendChild(row);
+        homeLanguageSelect = select;
+    }
+
+    function createFALRow() {
+        const row = document.createElement('div');
+        row.className = 'subject-row locked';
+        row.dataset.role = 'firstAdditional';
+
+        const select = document.createElement('select');
+        select.className = 'subject-select';
+        select.id = 'falSelect';
+
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = '— Enter FAL —';
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        select.appendChild(placeholder);
+
+        const markInput = document.createElement('input');
+        markInput.type = 'number';
+        markInput.className = 'subject-mark';
+        markInput.placeholder = '%';
+        markInput.min = 0;
+        markInput.max = 100;
+
+        const lockBadge = document.createElement('span');
+        lockBadge.className = 'lock-badge';
+        lockBadge.textContent = 'L';
+
+        row.appendChild(select);
+        row.appendChild(markInput);
+        row.appendChild(lockBadge);
+        subjectsContainer.appendChild(row);
+        falSelect = select;
+    }
+
+    function createLifeOrientationRow() {
         const row = document.createElement('div');
         row.className = 'subject-row locked';
         row.dataset.role = 'lifeOrientation';
 
-        const sel = document.createElement('select');
-        sel.disabled = true;
+        const select = document.createElement('select');
+        select.className = 'subject-select';
+        select.disabled = true;
         const opt = document.createElement('option');
         opt.value = 'Life Orientation';
         opt.textContent = 'Life Orientation';
         opt.selected = true;
-        sel.appendChild(opt);
+        select.appendChild(opt);
 
-        const mark = document.createElement('input');
-        mark.type = 'number';
-        mark.min = 0; mark.max = 100;
-        mark.placeholder = '%';
-        mark.value = '';
+        const markInput = document.createElement('input');
+        markInput.type = 'number';
+        markInput.className = 'subject-mark';
+        markInput.placeholder = '%';
+        markInput.min = 0;
+        markInput.max = 100;
 
-        const lock = document.createElement('span');
-        lock.className = 'lock-badge';
-        lock.textContent = 'L';
-        lock.title = 'Life Orientation is compulsory';
+        const lockBadge = document.createElement('span');
+        lockBadge.className = 'lock-badge';
+        lockBadge.textContent = 'L';
 
-        row.appendChild(sel);
-        row.appendChild(mark);
-        row.appendChild(lock);
-        return row;
+        row.appendChild(select);
+        row.appendChild(markInput);
+        row.appendChild(lockBadge);
+        subjectsContainer.appendChild(row);
     }
 
-    // Row: Home Language only
-    function makeHomeLanguageRow() {
-        const row = document.createElement('div');
-        row.className = 'subject-row';
-        row.dataset.role = 'homeLanguage';
+    function syncFALOptions() {
+        if (!homeLanguageSelect || !falSelect) return;
 
-        const sel = buildSelect(HOME_LANGUAGES, '— Choose home language —');
-        const mark = document.createElement('input');
-        mark.type = 'number';
-        mark.min = 0; mark.max = 100;
-        mark.placeholder = '%';
-        mark.value = '';
+        const chosenHL = homeLanguageSelect.value;
+        const previousFAL = falSelect.value;
 
-        const lock = document.createElement('span');
-        lock.className = 'lock-badge';
-        lock.textContent = 'L';
-        lock.title = 'Home Language is compulsory';
+        falSelect.innerHTML = '';
 
-        row.appendChild(sel);
-        row.appendChild(mark);
-        row.appendChild(lock);
-        return row;
-    }
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = '— Enter FAL —';
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        falSelect.appendChild(placeholder);
 
-    // Row: First Additional Language only
-    function makeFALRow() {
-        const row = document.createElement('div');
-        row.className = 'subject-row';
-        row.dataset.role = 'firstAdditional';
+        if (!chosenHL) return;
 
-        const sel = buildSelect(FIRST_ADDITIONAL_LANGUAGES, '— Choose additional language —');
-        const mark = document.createElement('input');
-        mark.type = 'number';
-        mark.min = 0; mark.max = 100;
-        mark.placeholder = '%';
-        mark.value = '';
-
-        const lock = document.createElement('span');
-        lock.className = 'lock-badge';
-        lock.textContent = 'L';
-        lock.title = 'First Additional Language is compulsory';
-
-        row.appendChild(sel);
-        row.appendChild(mark);
-        row.appendChild(lock);
-        return row;
-    }
-
-    // Row: free-choice optional subject
-    function makeOptionalRow() {
-        const row = document.createElement('div');
-        row.className = 'subject-row';
-
-        const sel = buildSelect(OTHER_SUBJECTS, '— Choose subject —');
-        const mark = document.createElement('input');
-        mark.type = 'number';
-        mark.min = 0; mark.max = 100;
-        mark.placeholder = '%';
-        mark.value = '';
-
-        const remove = document.createElement('button');
-        remove.type = 'button';
-        remove.className = 'remove';
-        remove.textContent = '×';
-        remove.addEventListener('click', () => {
-            if (list.querySelectorAll('.subject-row').length > 7) row.remove();
+        const allowed = FIRST_ADDITIONAL_LANGUAGES.filter(fal => {
+            const langName = chosenHL.replace(' Home Language', '');
+            return fal !== `${langName} First Additional Language`;
         });
 
-        row.appendChild(sel);
-        row.appendChild(mark);
-        row.appendChild(remove);
-        return row;
-    }
-
-    // Build the initial form
-    function initRows() {
-        list.innerHTML = '';
-        list.appendChild(makeLifeOrientationRow());
-        list.appendChild(makeHomeLanguageRow());
-        list.appendChild(makeFALRow());
-        for (let i = 0; i < 4; i++) list.appendChild(makeOptionalRow());
-    }
-
-    addBtn.addEventListener('click', () => {
-        if (list.querySelectorAll('.subject-row').length >= 12) return;
-        list.appendChild(makeOptionalRow());
-    });
-
-    // ---------- Read subjects ----------
-    function readSubjects() {
-        const rows = list.querySelectorAll('.subject-row');
-        const out = [];
-        rows.forEach(r => {
-            const sel = r.querySelector('select');
-            const mark = r.querySelector('input');
-            const s = sel.value;
-            const m = parseFloat(mark.value);
-            if (s && !isNaN(m) && m >= 0 && m <= 100) {
-                out.push({ subject: s, mark: m });
-            }
+        allowed.forEach(subj => {
+            const opt = document.createElement('option');
+            opt.value = subj;
+            opt.textContent = subj;
+            falSelect.appendChild(opt);
         });
-        return out;
+
+        if (previousFAL && allowed.includes(previousFAL)) {
+            falSelect.value = previousFAL;
+        }
     }
 
-    // ---------- Validate ----------
-    function validateForm() {
-        const rows = list.querySelectorAll('.subject-row');
-
-        // LO must have a valid mark
-        const loRow = list.querySelector('.subject-row.locked');
-        if (loRow) {
-            const loMark = parseFloat(loRow.querySelector('input').value);
-            if (isNaN(loMark) || loMark < 0 || loMark > 100) {
-                return 'Please enter a valid Life Orientation mark (0–100).';
-            }
-        }
-
-        // Home Language must be chosen with a mark
-        const hlRow = list.querySelector('.subject-row[data-role="homeLanguage"]');
-        if (hlRow) {
-            const hlSubject = hlRow.querySelector('select').value;
-            const hlMark = parseFloat(hlRow.querySelector('input').value);
-            if (!hlSubject) return 'Please choose your Home Language.';
-            if (isNaN(hlMark) || hlMark < 0 || hlMark > 100) {
-                return 'Please enter a valid Home Language mark (0–100).';
-            }
-        }
-
-        // First Additional Language must be chosen with a mark
-        const falRow = list.querySelector('.subject-row[data-role="firstAdditional"]');
-        if (falRow) {
-            const falSubject = falRow.querySelector('select').value;
-            const falMark = parseFloat(falRow.querySelector('input').value);
-            if (!falSubject) return 'Please choose your First Additional Language.';
-            if (isNaN(falMark) || falMark < 0 || falMark > 100) {
-                return 'Please enter a valid First Additional Language mark (0–100).';
-            }
-        }
-
-        // Every optional row that has a subject must have a mark (and vice versa)
-        let filled = 0;
-        for (const r of rows) {
-            if (r.classList.contains('locked')) { filled++; continue; }
-            if (r.dataset.role === 'homeLanguage' || r.dataset.role === 'firstAdditional') {
-                const s = r.querySelector('select').value;
-                const m = parseFloat(r.querySelector('input').value);
-                if (s && !isNaN(m)) filled++;
-                continue;
-            }
-            const subject = r.querySelector('select').value;
-            const markStr = r.querySelector('input').value.trim();
-            const mark = parseFloat(markStr);
-            const hasSubject = !!subject;
-            const hasMark = markStr !== '' && !isNaN(mark) && mark >= 0 && mark <= 100;
-            if (hasSubject && !hasMark) return 'Please enter a valid mark (0–100) for: ' + subject;
-            if (!hasSubject && hasMark) return 'Please choose a subject for every mark you entered.';
-            if (hasSubject && hasMark) filled++;
-        }
-
-        if (filled < 7) return 'Please enter at least 7 subjects with valid marks. You have ' + filled + '.';
-
-        // Duplicate check
-        const seen = new Set();
-        for (const r of rows) {
-            const s = r.querySelector('select').value;
-            if (!s) continue;
-            if (seen.has(s)) return 'You have "' + s + '" more than once. Please remove the duplicate.';
-            seen.add(s);
-        }
-
-        return null;
+    function getSelectedOptionalSubjects(exceptSelect = null) {
+        const used = new Set();
+        subjectsContainer.querySelectorAll('.subject-row:not(.locked) .subject-select').forEach(sel => {
+            if (sel !== exceptSelect && sel.value) used.add(sel.value);
+        });
+        return used;
     }
 
-    // ---------- Handle Calculate ----------
-    calcBtn.addEventListener('click', function () {
-        const error = validateForm();
-        if (error) {
-            showToast('⚠️ ' + error);
+    function fillOptionalSubjectOptions(select, preferred = '') {
+        const used = getSelectedOptionalSubjects(select);
+        const current = preferred || select.value;
+        select.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = '— Subject —';
+        select.appendChild(defaultOption);
+
+        OTHER_SUBJECTS.forEach(subj => {
+            if (used.has(subj) && subj !== current) return; 
+            const opt = document.createElement('option');
+            opt.value = subj;
+            opt.textContent = subj;
+            select.appendChild(opt);
+        });
+
+        if (current && Array.from(select.options).some(o => o.value === current)) {
+            select.value = current;
+        } else {
+            select.value = '';
+        }
+    }
+
+    function refreshAllOptionalSubjectDropdowns() {
+        subjectsContainer.querySelectorAll('.subject-row:not(.locked) .subject-select').forEach(sel => {
+            fillOptionalSubjectOptions(sel, sel.value);
+        });
+    }
+
+    function addSubjectRow(selectedSubject = '', mark = '') {
+        if (subjectsContainer.children.length >= MAX_SUBJECTS) {
+            showAppToast(`You can add up to ${MAX_SUBJECTS} subjects.`);
             return;
         }
-        const subjects = readSubjects();
+
+        const row = document.createElement('div');
+        row.className = 'subject-row';
+
+        const select = document.createElement('select');
+        select.className = 'subject-select';
+        fillOptionalSubjectOptions(select, selectedSubject);
+
+        select.addEventListener('change', () => {
+            refreshAllOptionalSubjectDropdowns();
+        });
+
+        const markInput = document.createElement('input');
+        markInput.type = 'number';
+        markInput.className = 'subject-mark';
+        markInput.placeholder = '%';
+        markInput.min = 0;
+        markInput.max = 100;
+        markInput.value = mark;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove';
+        removeBtn.textContent = '×';
+        removeBtn.addEventListener('click', () => {
+            const optionalRows = subjectsContainer.querySelectorAll('.subject-row:not(.locked)');
+            if (optionalRows.length > 4) {
+                row.remove();
+                refreshAllOptionalSubjectDropdowns();
+            } else {
+                showAppToast('You need at least 4 optional subjects (7 total).');
+            }
+        });
+
+        row.appendChild(select);
+        row.appendChild(markInput);
+        row.appendChild(removeBtn);
+        subjectsContainer.appendChild(row);
+        refreshAllOptionalSubjectDropdowns();
+    }
+
+    // ---------- Read & Validate ----------
+    function getSubjectsAndMarks() {
+        const rows = subjectsContainer.querySelectorAll('.subject-row');
+        const subjects = [];
+
+        rows.forEach(row => {
+            const select = row.querySelector('.subject-select');
+            const markInput = row.querySelector('.subject-mark');
+            const subject = select.value;
+            const mark = parseFloat(markInput.value);
+            const role = row.dataset.role || null;
+
+            if (subject && !isNaN(mark) && mark >= 0 && mark <= 100) {
+                subjects.push({ subject, mark, role });
+            }
+        });
+
+        return subjects;
+    }
+
+    function handleCalculate() {
+        if (!homeLanguageSelect || !homeLanguageSelect.value) {
+            showAppToast('Please select your Home Language.');
+            if (homeLanguageSelect) homeLanguageSelect.focus();
+            return;
+        }
+        if (!falSelect || !falSelect.value) {
+            showAppToast('Please select your First Additional Language (FAL).');
+            if (falSelect) falSelect.focus();
+            return;
+        }
+
+        const lockedRows = subjectsContainer.querySelectorAll('.subject-row.locked');
+        for (const row of lockedRows) {
+            const markInput = row.querySelector('.subject-mark');
+            const mark = parseFloat(markInput.value);
+            const subject = row.querySelector('.subject-select').value || 'this subject';
+            if (isNaN(mark) || mark < 0 || mark > 100) {
+                showAppToast(`Please enter a valid mark (0–100) for: ${subject}`);
+                markInput.focus();
+                return;
+            }
+        }
+
+        if (homeLanguageSelect && falSelect) {
+            const hlLang = homeLanguageSelect.value.replace(' Home Language', '');
+            const falLang = falSelect.value.replace(' First Additional Language', '');
+            if (hlLang === falLang) {
+                showAppToast('Home Language and First Additional Language cannot be the same language.');
+                falSelect.focus();
+                return;
+            }
+        }
+
+        const subjects = getSubjectsAndMarks();
+
+        if (subjects.length < MIN_SUBJECTS) {
+            showAppToast(`Please enter at least ${MIN_SUBJECTS} subjects with valid marks. You have ${subjects.length}.`);
+            return;
+        }
+
+        calcBtn.disabled = true;
+        calcBtn.textContent = 'Calculating…';
+
         try {
             sessionStorage.setItem('aps_subjects', JSON.stringify(subjects));
         } catch (e) {
             console.warn('sessionStorage failed, using localStorage fallback', e);
             localStorage.setItem('aps_subjects', JSON.stringify(subjects));
         }
-        window.location.href = 'aps-results.html';
-    });
 
-    // ---------- Toast ----------
-    function showToast(msg) {
-        let el = document.getElementById('apsToast');
-        if (!el) {
-            el = document.createElement('div');
-            el.id = 'apsToast';
-            el.className = 'aps-toast';
-            document.body.appendChild(el);
-        }
-        el.textContent = msg;
-        el.classList.add('show');
-        clearTimeout(showToast._t);
-        showToast._t = setTimeout(() => el.classList.remove('show'), 2600);
+        window.location.href = 'aps-results.html';
     }
 
-    initRows();
-})();
+    // Run init
+    init();
+});
