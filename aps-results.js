@@ -102,6 +102,43 @@
         return top6.reduce((sum, m) => sum + nscLevel(m), 0);
     }
 
+        // MUT APS: Uses 1-8 scale (90%+ = 8). Best 6 academic subjects, LO excluded.
+    // Marks below 40% (Levels 1 & 2) award 0 points.
+    function mutAPS(subjects) {
+        const acad = subjects.filter(s => s.subject !== 'Life Orientation');
+        const top6 = acad.map(s => Number(s.mark)).sort((a, b) => b - a).slice(0, 6);
+        
+        return top6.reduce((sum, mark) => {
+            if (mark >= 90) return sum + 8;
+            if (mark >= 80) return sum + 7;
+            if (mark >= 70) return sum + 6;
+            if (mark >= 60) return sum + 5;
+            if (mark >= 50) return sum + 4;
+            if (mark >= 40) return sum + 3;
+            return sum + 0; // 0 - 39% awards 0 points
+        }, 0);
+    }
+
+        // UJ APS: Best 6 subjects, LO excluded. Added
+    // Note: 80-100% = 7 points, 70-79% = 6 points, etc.
+    function ujAPS(subjects) {
+        const acad = subjects.filter(s => s.subject !== 'Life Orientation');
+        const top6 = acad.map(s => Number(s.mark)).sort((a, b) => b - a).slice(0, 6);
+        
+        let total = 0;
+        top6.forEach(mark => {
+            if (mark >= 80) total += 7;
+            else if (mark >= 70) total += 6;
+            else if (mark >= 60) total += 5;
+            else if (mark >= 50) total += 4;
+            else if (mark >= 40) total += 3;
+            else if (mark >= 30) total += 2;
+            else total += 1; // 0-29%
+        });
+        
+        return total; // Max 42
+    }
+
     // UCT FPS: Sum of top 6 percentages (excl LO, marks below 40% ignored)
     function uctFPS(subjects) {
         const acad = subjects.filter(s => s.subject !== 'Life Orientation' && s.mark >= 40);
@@ -222,13 +259,29 @@
         if (lo && lo.mark >= 50) total += 7;
         return total;
     }
-
-    // Univen APS: Best 7 academic subjects (excl LO, below 40% ignored)
+ 
+        // Univen APS: Uses a 1 to 10 decimal point scale (based on exact percentage)
+    // LO excluded, best 7 subjects, marks below 40% score 0
     function univenAPS(subjects) {
-        const acad = subjects.filter(s => s.subject !== 'Life Orientation' && s.mark >= 40);
+        function univenScore(mark) {
+            if (mark >= 90) return 9 + ((mark - 90) / 10); // 90 = 9.0, 100 = 10.0
+            if (mark >= 80) return 8 + ((mark - 80) / 10); // 80 = 8.0, 89 = 8.9
+            if (mark >= 70) return 7 + ((mark - 70) / 10); // 70 = 7.0, 79 = 7.9
+            if (mark >= 60) return 6 + ((mark - 60) / 10); // 60 = 6.0, 69 = 6.9
+            if (mark >= 50) return 5 + ((mark - 50) / 10); // 50 = 5.0, 59 = 5.9
+            if (mark >= 40) return 4 + ((mark - 40) / 10); // 40 = 4.0, 49 = 4.9
+            return 0; // 39% and below = 0
+        }
+
+        const acad = subjects.filter(s => s.subject !== 'Life Orientation');
         const top7 = acad.map(s => s.mark).sort((a, b) => b - a).slice(0, 7);
-        return top7.reduce((sum, m) => sum + nscLevel(m), 0);
+        
+        const total = top7.reduce((sum, m) => sum + univenScore(m), 0);
+        
+        // Round to 1 decimal place to match UNIVEN's format (e.g., 33.5)
+        return Math.round(total * 10) / 10; 
     }
+    
 
     // CPUT APS: Sum of top 6 percentages / 10
     function cputAPS(subjects) {
@@ -269,6 +322,26 @@
             .reduce((sum, s) => sum + s.total, 0);
     }
 
+        // VUT APS: Uses 1-8 scale (90%+ = 8). Best 6 academic subjects, LO excluded.
+    function vutAPS(subjects) {
+        const acad = subjects.filter(s => s.subject !== 'Life Orientation');
+        const top6 = acad.map(s => Number(s.mark)).sort((a, b) => b - a).slice(0, 6);
+        
+        let total = 0;
+        top6.forEach(mark => {
+            if (mark >= 90) total += 8;
+            else if (mark >= 80) total += 7;
+            else if (mark >= 70) total += 6;
+            else if (mark >= 60) total += 5;
+            else if (mark >= 50) total += 4;
+            else if (mark >= 40) total += 3;
+            else if (mark >= 30) total += 2;
+            else total += 1; // 0-29%
+        });
+        
+        return total;
+    }
+
     // ---------- Logos ----------
     function uniLogoShort(name) {
         const map = {
@@ -306,13 +379,13 @@
 
     // ---------- University definitions (UPDATED) ----------
     const UNIVERSITIES = [
-        { name: "University of Johannesburg",                 score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+        { name: "University of Johannesburg",                 score: ujAPS,           label: "uj APS",              note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
         { name: "University of Pretoria",                     score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
         { name: "North-West University",                      score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
         { name: "Tshwane University of Technology",           score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
-        { name: "Vaal University of Technology",              score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+        { name: "Vaal University of Technology",              score: vutAPS,          label: "vut APS",             note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
         { name: "University of Venda",                        score: univenAPS,       label: "Univen APS",          note: "Best 7 subjects, LO excluded.",        formula: "Sum of level points for top 7 (excl LO)" },
-        { name: "Mangosuthu University of Technology",        score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
+        { name: "Mangosuthu University of Technology",        score: mutAPS,          label: "MUT APS (1-8)",       note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
         { name: "University of South Africa",                 score: standardAPS,     label: "Standard APS",        note: "Best 6 subjects, LO excluded.",        formula: "Sum of level points for top 6 (excl LO)" },
         { name: "Cape Peninsula University of Technology",    score: cputAPS,         label: "CPUT APS",            note: "Best 6 % ÷ 10, LO excluded.",           formula: "Sum of top 6 percentages ÷ 10" },
         { name: "University of the Witwatersrand",            score: witsAPS,         label: "Wits APS",            note: "Best 7 incl LO (1-8 scale) + Eng/Maths bonus.",    formula: "Top 6 (1-8 scale) + LO (≤4) + 2 Eng + 2 Maths" },

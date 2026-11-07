@@ -7687,14 +7687,28 @@ function calculateUWCAPS(subjects) {
     return total;
 }
 
-/** UNIVEN APS: best 7 subjects (LO excluded, marks below 40% excluded). */
+/** UNIVEN APS: best 7 subjects (LO excluded), decimal scale (e.g., 81% = 8.1). Marks < 40% score 0. */
 function calculateUnivenAPS(subjects) {
+    function univenScore(mark) {
+        if (mark >= 90) return 9 + ((mark - 90) / 10); // 90 = 9.0, 100 = 10.0
+        if (mark >= 80) return 8 + ((mark - 80) / 10); // 80 = 8.0, 89 = 8.9
+        if (mark >= 70) return 7 + ((mark - 70) / 10); // 70 = 7.0, 79 = 7.9
+        if (mark >= 60) return 6 + ((mark - 60) / 10); // 60 = 6.0, 69 = 6.9
+        if (mark >= 50) return 5 + ((mark - 50) / 10); // 50 = 5.0, 59 = 5.9
+        if (mark >= 40) return 4 + ((mark - 40) / 10); // 40 = 4.0, 49 = 4.9
+        return 0; // 39% and below = 0
+    }
+
     const academic = subjects.filter(s => 
-        s.subject !== 'Life Orientation' && Number(s.mark) >= 40
+        s.subject !== 'Life Orientation' && !Number.isNaN(Number(s.mark))
     );
     if (!academic.length) return 0;
+    
     const bestSeven = academic.map(s => Number(s.mark)).sort((a, b) => b - a).slice(0, 7);
-    return bestSeven.reduce((sum, m) => sum + nscLevel(m), 0);
+    const total = bestSeven.reduce((sum, m) => sum + univenScore(m), 0);
+    
+    return Math.round(total * 10) / 10; 
+
 }
 
 
@@ -7732,6 +7746,26 @@ function calculateCUTAPS(subjects) {
     }
 
     return total; // max 36 (5×7 + 1)
+}
+
+/** MUT APS: 1–8 scale, marks below 40% award 0 points. */
+function calculateMUTAPS(subjects) {
+    const academic = subjects.filter(s => 
+        s.subject !== 'Life Orientation' && !Number.isNaN(Number(s.mark))
+    );
+    if (!academic.length) return 0;
+
+    const bestSix = academic.map(s => Number(s.mark)).sort((a, b) => b - a).slice(0, 6);
+    
+    return bestSix.reduce((sum, mark) => {
+        if (mark >= 90) return sum + 8;
+        if (mark >= 80) return sum + 7;
+        if (mark >= 70) return sum + 6;
+        if (mark >= 60) return sum + 5;
+        if (mark >= 50) return sum + 4;
+        if (mark >= 40) return sum + 3;
+        return sum + 0; // 0 - 39% awards 0 points
+    }, 0);
 }
 
 
@@ -7975,6 +8009,17 @@ function scoreForUniversity(uniName, subjects) {
         const s = calculateNMUAS(subjects);
         return { score: s, label: 'Applicant Score', unit: '', display: String(s), maxHint: 'max 600' };
     }
+
+     if (n.includes('vaal') || n.includes('vut')) {
+        const s = calculateAPS8(subjects);
+        return { score: s, label: 'VUT APS', unit: '', display: String(s), maxHint: '1–8 scale, max 48' };
+     }
+
+      if (n.includes('johannesburg') || n === 'uj') {
+        const s = calculateUJAPS(subjects);
+        return { score: s, label: 'UJ APS', unit: '', display: String(s), maxHint: 'best 6, max 42' };
+      }
+
     if (n.includes('western cape') || n.includes('uwc')) {
         const s = calculateUWCAPS(subjects);
         return { score: s, label: 'UWC Points', unit: '', display: String(s), maxHint: 'English+Maths weighted, max 57' };
@@ -8000,16 +8045,16 @@ function scoreForUniversity(uniName, subjects) {
         return { score: s, label: 'SPU APS', unit: '', display: String(s), maxHint: 'best 6 incl LO + Maths/HL bonus' };
     }
 
-    if (n.includes('mangosuthu') || n.includes('mut')) {
-    const s = calculateStandardAPS(subjects);
-    return { score: s, label: 'MUT APS', unit: '', display: String(s), maxHint: 'best 6, excl. LO, max 42' };
-}
+   if (n.includes('mangosuthu') || n.includes('mut')) {
+        const s = calculateMUTAPS(subjects);
+        return { score: s, label: 'MUT APS', unit: '', display: String(s), maxHint: '1–8 scale, max 48' };
+    }
 
 
-if (n.includes('walter sisulu') || n.includes('wsu')) {
+   if (n.includes('walter sisulu') || n.includes('wsu')) {
     // Most programmes exclude LO.
     return wsuScore(subjects, false);
-}
+    }
 
     const s = calculateStandardAPS(subjects);
     return { score: s, label: 'APS', unit: '', display: String(s), maxHint: 'best 6, max 42' };
