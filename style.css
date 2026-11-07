@@ -3197,3 +3197,49 @@ input:focus, select:focus {
         font-size: 1rem;
     }
 }
+
+/* ============================================================
+   ULTRA-COMPACT ACTION CARDS FOR MOBILE (≤600px)
+   ============================================================ */
+@media (max-width: 600px) {
+
+    /* 1. Shrink the overall card container */
+    .action-card {
+        margin: 0.5rem !important;        /* Tighter gap around the outside */
+        padding: 1rem !important;         /* Reduced internal padding (from 2.5rem/1.25rem) */
+        border-radius: 10px !important;   /* Slightly sharper corners */
+    }
+
+    /* 2. Shrink the "STUDENT SERVICE" tag */
+    .action-card::before {
+        font-size: 0.55rem !important;    /* Very small label */
+        letter-spacing: 0.05em !important;
+        margin-bottom: 0.2rem !important;
+    }
+
+    /* 3. Shrink the main title (APS Calculator) */
+    .action-card h3 {
+        font-size: 1.15rem !important;    /* Reduced from 1.8rem */
+        margin-bottom: 0.35rem !important;
+    }
+
+    /* 4. Shrink and tighten the description text */
+    .action-card p {
+        font-size: 0.75rem !important;    /* Smaller body text */
+        line-height: 1.35 !important;
+        margin-bottom: 0.85rem !important; /* Remove the giant flex-grow gap */
+        flex: none !important;            /* Stop it from stretching to fill space */
+    }
+
+    /* 5. Shrink the CTA link (Calculate my APS ->) */
+    .action-card .cta {
+        font-size: 0.75rem !important;
+        margin-top: 0 !important;
+    }
+
+    /* 6. Ensure the grid doesn't add extra gap spacing */
+    .action-grid {
+        gap: 0 !important;
+        padding: 0 !important;
+    }
+}
