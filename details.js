@@ -196,6 +196,15 @@ function init() {
     subjectsContainer.addEventListener('input', updateLiveAPS);
     subjectsContainer.addEventListener('change', updateLiveAPS);
 
+    // Automatically close the dropdown/keyboard after selecting a subject
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.tagName === 'SELECT') {
+            setTimeout(function() {
+                e.target.blur(); 
+            }, 50);
+        }
+    });
+
     syncFALOptions();
     updateLiveAPS();
     
