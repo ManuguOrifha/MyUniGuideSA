@@ -1,8 +1,8 @@
 // ============================================================
 // APS CALCULATOR PAGE
-// Uses the same subject-row design as details.js.
-// Collects subjects & marks, validates, then saves to
-// sessionStorage and redirects to aps-results.html
+// Starts blank every time. Allows manual pre-fill from 
+// details page via a button. Saves to sessionStorage and 
+// redirects to aps-results.html
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -79,6 +79,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const subjectsContainer = document.getElementById('subjectList');
     const addSubjectBtn = document.getElementById('addSubjectBtn');
     const calcBtn = document.getElementById('calcBtn');
+    const prefillBtn = document.getElementById('prefillBtn');
+    
+    // Live APS Box
+    const apsLiveEl = document.getElementById('apsLive');
 
     let homeLanguageSelect = null;
     let falSelect = null;
@@ -95,11 +99,97 @@ document.addEventListener('DOMContentLoaded', function () {
 
         addSubjectBtn.addEventListener('click', () => {
             addSubjectRow();
+            updateLiveAPS();
         });
 
         calcBtn.addEventListener('click', handleCalculate);
 
+        if (prefillBtn) {
+            prefillBtn.addEventListener('click', prefillFromDetails);
+            
+            // Only show the prefill button if there is actually saved data
+            if (localStorage.getItem('uniPath_subjects')) {
+                prefillBtn.style.display = 'inline-block';
+            }
+        }
+
+        // Listen for changes to update live APS
+        subjectsContainer.addEventListener('input', updateLiveAPS);
+        subjectsContainer.addEventListener('change', updateLiveAPS);
+
         syncFALOptions();
+        updateLiveAPS();
+    }
+
+    // ---------- Pre-fill ----------
+    function prefillFromDetails() {
+        const savedSubjectsRaw = localStorage.getItem('uniPath_subjects');
+        if (!savedSubjectsRaw) {
+            showAppToast('No saved details found.');
+            return;
+        }
+
+        try {
+            const savedSubjects = JSON.parse(savedSubjectsRaw);
+            if (!Array.isArray(savedSubjects) || !savedSubjects.length) return;
+
+            // Home Language
+            const hlEntry = savedSubjects.find(s => s.role === 'homeLanguage');
+            if (hlEntry && homeLanguageSelect) {
+                homeLanguageSelect.value = hlEntry.subject;
+                const hlMark = homeLanguageSelect.closest('.subject-row').querySelector('.subject-mark');
+                if (hlMark) hlMark.value = hlEntry.mark;
+            }
+
+            // FAL
+            syncFALOptions();
+            const falEntry = savedSubjects.find(s => s.role === 'firstAdditional');
+            if (falEntry && falSelect) {
+                falSelect.value = falEntry.subject;
+                const falMark = falSelect.closest('.subject-row').querySelector('.subject-mark');
+                if (falMark) falMark.value = falEntry.mark;
+            }
+
+            // Life Orientation
+            const loEntry = savedSubjects.find(s => s.role === 'lifeOrientation');
+            if (loEntry) {
+                const loRow = subjectsContainer.querySelector('.subject-row[data-role="lifeOrientation"]');
+                if (loRow) {
+                    const loMark = loRow.querySelector('.subject-mark');
+                    if (loMark) loMark.value = loEntry.mark;
+                }
+            }
+
+            // Optional subjects
+            const optionalEntries = savedSubjects.filter(s => !s.role);
+            const currentOptionalRows = subjectsContainer.querySelectorAll('.subject-row:not(.locked)').length;
+            const needed = Math.max(4, optionalEntries.length);
+
+            for (let i = currentOptionalRows; i < needed; i++) {
+                addSubjectRow();
+            }
+
+            const optionalRows = subjectsContainer.querySelectorAll('.subject-row:not(.locked)');
+            optionalEntries.forEach((entry, idx) => {
+                const row = optionalRows[idx];
+                if (!row) return;
+                const sel = row.querySelector('.subject-select');
+                const mark = row.querySelector('.subject-mark');
+                if (sel) {
+                    fillOptionalSubjectOptions(sel, entry.subject);
+                    sel.value = entry.subject;
+                }
+                if (mark) mark.value = entry.mark;
+            });
+
+            refreshAllOptionalSubjectDropdowns();
+            updateLiveAPS();
+            showAppToast('Loaded your subjects from "Your Details"');
+            prefillBtn.style.display = 'none'; // Hide button after loading
+            
+        } catch (e) {
+            console.warn('Could not pre-fill from details', e);
+        }
     }
 
     // ---------- Row Creation ----------
@@ -128,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         select.addEventListener('change', () => {
             syncFALOptions();
+            updateLiveAPS();
         });
 
         const markInput = document.createElement('input');
@@ -300,6 +391,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         select.addEventListener('change', () => {
             refreshAllOptionalSubjectDropdowns();
+            updateLiveAPS();
         });
 
         const markInput = document.createElement('input');
@@ -319,6 +411,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (optionalRows.length > 4) {
                 row.remove();
                 refreshAllOptionalSubjectDropdowns();
+                updateLiveAPS();
             } else {
                 showAppToast('You need at least 4 optional subjects (7 total).');
             }
@@ -351,6 +444,39 @@ document.addEventListener('DOMContentLoaded', function () {
         return subjects;
     }
 
+    // ---------- Live APS (Standard scale for guidance) ----------
+    function calculateAPS(subjects) {
+        if (!subjects.length) return 0;
+        const academic = subjects.filter(s => s.subject !== 'Life Orientation');
+        if (!academic.length) return 0;
+        const marks = academic.map(s => s.mark).sort((a, b) => b - a).slice(0, 6);
+        let aps = 0;
+        marks.forEach(mark => {
+            if (mark >= 80) aps += 7;
+            else if (mark >= 70) aps += 6;
+            else if (mark >= 60) aps += 5;
+            else if (mark >= 50) aps += 4;
+            else if (mark >= 40) aps += 3;
+            else if (mark >= 30) aps += 2;
+            else aps += 1;
+        });
+        return aps;
+    }
+
+    function updateLiveAPS() {
+        if (!apsLiveEl) return;
+        const subjects = getSubjectsAndMarks();
+        const aps = calculateAPS(subjects);
+        const academicCount = subjects.filter(s => s.subject !== 'Life Orientation').length;
+        
+        apsLiveEl.innerHTML = `
+            <span class="aps-live-label">Your APS</span>
+            <span class="aps-live-value">${aps}</span>
+            <span class="aps-live-hint">${academicCount < 6 ? `(enter ${6 - academicCount} more academic mark${6 - academicCount !== 1 ? 's' : ''})` : '(best 6 subjects · LO excluded)'}</span>
+        `;
+    }
+
+    // ---------- Submit ----------
     function handleCalculate() {
         if (!homeLanguageSelect || !homeLanguageSelect.value) {
             showAppToast('Please select your Home Language.');

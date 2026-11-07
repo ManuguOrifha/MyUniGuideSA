@@ -7,21 +7,10 @@
 (function () {
     'use strict';
 
-    // ---------- Back button ----------
-    const backBtn = document.getElementById('backBtn');
-    if (backBtn) {
-        backBtn.addEventListener('click', function () {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = 'aps.html';
-            }
-        });
-    }
-
     // ---------- Theme ----------
     const btn = document.getElementById('themeToggle');
     function applyIcon() {
+        if (!btn) return;
         const light = document.documentElement.classList.contains('light');
         const icon = btn.querySelector('.theme-icon');
         const label = btn.querySelector('.theme-label');
@@ -29,24 +18,28 @@
         if (label) label.textContent = light ? 'Dark mode' : 'Light mode';
     }
     applyIcon();
-    btn.addEventListener('click', function () {
-        document.documentElement.classList.toggle('light');
-        const light = document.documentElement.classList.contains('light');
-        localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
-        applyIcon();
-    });
+    if (btn) {
+        btn.addEventListener('click', function () {
+            document.documentElement.classList.toggle('light');
+            const light = document.documentElement.classList.contains('light');
+            localStorage.setItem('uniPath_theme', light ? 'light' : 'dark');
+            applyIcon();
+        });
+    }
 
     // ---------- Menu ----------
     const menuBtn = document.getElementById('menuBtn');
     const menu = document.getElementById('sideMenu');
     const backdrop = document.getElementById('menuBackdrop');
     function openMenu() {
+        if (!menu || !backdrop) return;
         menu.hidden = false; backdrop.hidden = false;
         requestAnimationFrame(function () {
             menu.classList.add('open'); backdrop.classList.add('open');
         });
     }
     function closeMenu() {
+        if (!menu || !backdrop) return;
         menu.classList.remove('open'); backdrop.classList.remove('open');
         setTimeout(function () { menu.hidden = true; backdrop.hidden = true; }, 200);
     }
@@ -306,12 +299,12 @@
     // ---------- Init ----------
     const subjects = loadSubjects();
     if (!subjects) {
+        // If no subjects found, show a beautiful error card instead of an empty white box
         resultsArea.innerHTML = `
-            <div class="result-error">
-                ⚠️ No subjects found. Please enter your subjects on the APS Calculator page.
-            </div>
-            <div style="text-align:center; margin-top:1rem;">
-                <a href="aps.html" class="btn-secondary" style="text-decoration:none;">Go to APS Calculator</a>
+            <div class="result-error" style="text-align: center; padding: 3rem 1.5rem;">
+                <p style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--danger);">⚠️ No subjects found</p>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Please enter your subjects on the APS Calculator page to see your scores.</p>
+                <a href="aps.html" class="btn-primary" style="text-decoration:none; display: inline-flex; width: auto; margin-top: 0;">Go to APS Calculator</a>
             </div>
         `;
         return;
